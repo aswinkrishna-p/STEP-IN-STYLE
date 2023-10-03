@@ -1,0 +1,83 @@
+<%- include('../layouts/userheader.ejs') %>
+
+    <div class="hero-wrap hero-bread" >
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span></p>
+            <h1 class="mb-0 bread">CREATE ACCOUNT</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section ftco-cart">
+      <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_text text-center">
+                    <div class="login_part_text_iner">
+                        <h2>New to our Shop?</h2>
+                        <p>Get the latest scoop on new arrivals, sales, special offers and receive 20% off on your next purchase.®</p>
+                        <a href="/login" class="btn btn-primary">Already have an account</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_form bg-light p-4 rounded">
+                    <div class="login_part_form_iner text-center">
+                        <h2>Create an Account</h2>
+                        <% if (error) { %>
+                            <div class="alert alert-danger">
+                                <%= error %>
+                            </div>
+                            <% } %>
+                            
+                        <form class="row contact_form" action="/signup" method="post" >
+                            <div class="col-md-6 form-group">
+                                <input type="text" class="form-control" id="first_name" name="first_name" value=""
+                                    placeholder="First Name" required>
+                                    <small id="fnameError"></small>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <input type="text" class="form-control" id="last_name" name="last_name" value=""
+                                    placeholder="Last Name"required>
+                                    <small id="lnameError"></small> 
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input type="email" class="form-control" id="email" name="email" value=""
+                                    placeholder="Email"required>
+                                    <small id="emailError"></small> 
+                            </div>
+                            <div class="col-md-12 form-group">
+                              <input type="text" class="form-control" id="phone" name="phone" value=""
+                                  placeholder="Phone Number"required>
+                                  <small id="phoneError"></small> 
+                          </div>
+                            <div class="col-md-12 form-group">
+                                <input type="password" class="form-control" id="password" name="password" value=""
+                                    placeholder="Password">
+                                    <small id="passwordError"></small> 
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" value=""
+                                    placeholder="Confirm Password">
+                                    <small id="cPasswordError"></small> 
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <button type="submit" onclick="validateForm()" class="btn btn-primary">
+                                    Sign up
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+		</section>
+		
+
+   <%- include('../layouts/userfooter.ejs') %>

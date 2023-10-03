@@ -1,0 +1,117 @@
+
+
+
+<%- include('../layouts/adminheader') %>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row" style="justify-content: space-evenly;">
+   <!-- Sidebar Start -->
+   <div class="col-lg-3 sidebar pe-4 pb-3">
+    <nav class="navbar bg-light navbar-light">
+        <a href="index.html" class="navbar-brand mx-1  mb-3">
+            <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>STEP IN STYLE</h3>
+        </a>
+        <div class="d-flex align-items-center ms-4 mb-4">
+            <div class="position-relative">
+                <!-- <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;"> -->
+                <!-- <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div> -->
+            </div>
+            <div class="ms-3">
+                <!-- <h6 class="mb-0">Jhon Doe</h6> -->
+                <span>Admin</span>
+            </div>
+        </div>
+        <div class="navbar-nav w-100">
+            <a href="/admin/Dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a href="/admin/userlist" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users</a>
+            <a href="/admin/productList" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Products</a>
+            <a href="/admin/categorylist" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Categories</a>
+            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
+            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
+            <a href="/admin/bannerlist" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banners</a>
+            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a>
+        </div>
+    </nav>
+</div>
+<!-- Sidebar End -->
+<div class="col-lg-9 p-4">
+
+  
+<div class="container-xxl position-relative bg-white d-flex p-4">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <div class="container-fluid" style="margin-left: 12em;  " >
+        <div class="mt-4 p-4 border rounded mx-auto" style="margin-left: 10em;">
+          <h1 class="mb-4">Add Product</h1>
+          <!-- Form for adding a new product -->
+          <form action="/admin/productlist" method="POST" enctype="multipart/form-data">
+            <!-- Product Photo -->
+            <div class="form-group">
+              <label for="productPhoto" class="form-label">Product Photo</label>
+              <input type="file" class="form-control" id="productPhoto"  name="photo" multiple required>
+            </div>
+            <!-- Product Name -->
+            <div class="form-group">
+              <label for="productName" class="form-label">Product Name</label>
+              <input type="text" class="form-control" id="productName" placeholder="Enter product name" required name="productName">
+            </div>
+            <!-- Product Price -->
+            <div class="form-group">
+              <label for="productPrice" class="form-label">Product Price</label>
+              <input type="number" class="form-control" id="productPrice" placeholder="Enter product price" required name="price">
+            </div>
+
+
+            <!-- Product Category -->
+            <div class="form-group">
+              <label for="productCategory" class="form-label">Product Category</label>
+              <select class="form-select" id="productCategory" required name="category">
+                <option value="">Select a category</option>
+                <%  cate gories.forEach(cat =>{%>
+                <option value="<%= cat%>"><%= cat %></option>
+                <% }) %>
+                <!-- Add more categories as needed -->
+              </select>
+            </div>
+
+
+            <!-- gender -->
+            <div class="form-group">
+              <label for="productgender" class="form-label"> Gender</label>
+              <select class="form-select" id="gender" required name="gender">
+                <option value="">Select a gender</option>
+                <%  genders.forEach(gender =>{%>
+                <option value="<%= gender %>"><%= gender %></option>
+                <% }) %>
+               
+              </select>
+            </div>
+ 
+            <!-- Product Quantity -->
+            <div class="form-group">
+              <label for="productQuantity" class="form-label">Product Stock</label>
+              <input type="number" class="form-control" min="1" max="500"  id="productQuantity" placeholder="Enter product stock" required name="stock">
+            </div>
+            <!-- Product Description -->
+            <div class="form-group">
+              <label for="productDescription" class="form-label">Product Description</label>
+              <textarea class="form-control" id="productDescription" rows="4" placeholder="Enter product description" required name="description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success mt-4" name="submit">Add Product</button>
+          </form>
+        </div>
+      </div>
+      
+
+<%- include('../layouts/adminfooter') %>
+
+
+

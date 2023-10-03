@@ -1,0 +1,117 @@
+
+<%- include('../layouts/userheader') %>
+
+<div class="hero-wrap hero-bread" >
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
+          <h1 class="mb-0 bread">My wishlist</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<section class="container my-4">
+    <!-- <h1>Your Wishlist</h1> -->
+    <div class="cart-list">
+    <% if (user.wishlist.length> 0) { %>
+    <table class="table">
+        <thead class="thead-primary" >
+            <tr>
+                <th></th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i < wishlist.length; i++) { %>
+            <tr >
+                <td>
+                    <a href="/singleproduct?productid=<%= wishlist[i]._id %>">
+                    <img src="/images/<%= wishlist[i].photo[0] %>" alt="<%= wishlist[i].productName %>" width="100">
+                    </a> </td>
+                    <td><p><%= wishlist[i].productName %></p></td>
+                <input type="hidden" name="" id="price<%= wishlist[i]._id %>" value="<%= wishlist[i].price %>">
+                <td>$<%= wishlist[i].price %></td>
+                <td id="remove-wishlist-<%= wishlist[i]._id %>">
+                    <button class="btn btn-primary" onclick="addtoCart('<%= wishlist[i]._id %>')">Add to Cart</button>
+                    <button class="btn btn-danger" onclick="removeFromWishlist('<%= wishlist[i]._id %>')">Remove</button>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+  </div>
+    <% } else { %>
+      <p>Your wishlist is empty.</p>
+      <% } %>
+</section>
+
+
+<script>
+    function addtoCart(id) {
+      const price = document.querySelector(`#price${id}`).value;
+    
+      const data = {
+        productid: id,
+        size: 1,
+        price: price,
+      };
+    
+      fetch(`/addtocart/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Set the correct content type
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          console.log(response);
+          if (response.ok) {
+            return response.json(); // Parse the JSON response
+          } else {
+            throw new Error('Failed to add product to cart');
+          }
+        })
+        .then((data) => {
+         
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error('Error adding product to cart:', error);
+        });
+    }
+
+
+    /////////////////////////////////////////////////////////////
+
+
+   
+function removeFromWishlist(productId) {
+  // Send a request to remove the product from the wishlist
+  fetch(`/removefromwishlist/${productId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        // If successful, remove the product row from the table
+        const productRow = document.querySelector(`#remove-wishlist-${productId}`);
+        if (productRow) {
+          productRow.remove();
+        }
+        window.location.reload()
+      } else {
+        throw new Error('Failed to remove product from wishlist');
+      }
+    })
+    .catch((error) => {
+      console.error('Error removing product from wishlist:', error);
+    });
+}
+    </script>
+<%- include('../layouts/userfooter') %>

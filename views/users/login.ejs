@@ -1,0 +1,59 @@
+<%- include('../layouts/userheader.ejs') %>
+
+<div class="hero-wrap hero-bread" >    
+  <!-- style="background-image: url('images/bg_6.jpg')" -->
+  <div class="container">
+    <div class="row no-gutters slider-text align-items-center justify-content-center">
+      <div class="col-md-9 ftco-animate text-center">
+        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span></p>
+        <h1 class="mb-0 bread">LOGIN TO YOUR ACCOUNT</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="ftco-section ftco-cart">
+  <div class="container">
+    <div class="row align-items-center justify-content-center"> <!-- Use justify-content-center to center-align the content -->
+      <div class="col-lg-6 col-md-6">
+        <div class="login_part_form custom-form-bg p-4 rounded">
+          <div class="login_part_form_iner text-center">
+            <h2>YOUR ACCOUNT FOR EVERYTHING</h2>
+
+            <% if (error) { %>
+              <div class="alert alert-danger">
+                <%= error %>
+              </div>
+            <% } %>
+
+            <form class="row contact_form" action="/login" method="post">
+              <div class="col-md-12 form-group">
+                <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email">
+              </div>
+              <div class="col-md-12 form-group">
+                <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password">
+              </div>
+              <div class="col-md-12 form-group">
+                <a href="/forgotpass">Forgot Password?</a>
+              </div>
+              <div class="col-md-12 form-group">
+                <button type="submit" value="submit" class="btn btn-primary">
+                  Login
+                </button>
+              </div>
+              <div class="col-md-12 form-group">
+                <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<%- include('../layouts/userfooter') %>
+
+
+

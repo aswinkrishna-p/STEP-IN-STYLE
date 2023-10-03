@@ -1,0 +1,218 @@
+<%- include('../layouts/userheader') %>
+
+
+<div class="hero-wrap hero-bread" >
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
+          <h1 class="mb-0 bread">My Cart</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="ftco-section ftco-cart">
+          <div class="container">
+              <div class="row">
+              <div class="col-md-12 ftco-animate">
+                  <div class="cart-list">
+                    <% if (user.cart.length> 0) { %>
+                      <table class="table">
+                          <thead class="thead-primary">
+                            <tr class="text-center">
+                              <th>&nbsp;</th>
+                              <th>&nbsp;</th>
+                              <th>Product</th>
+                              <th>Price</th>
+                              <th>Quantity</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% user.cart.forEach((item, index)=> { %>
+                            <tr class="text-center">
+                              <td class="product-remove">
+                                <button class="remove-item-btn" style="width: 20px;" onclick="removeCartItem('<%= item.product._id %>')">
+                                    <span class="ion-ios-close"></span>
+                                </button>
+                            </td>
+                            
+                            
+                              <td><a
+                                href="/singleproduct?productid=<%= item.product._id %>"><img
+                                    src="/images/<%= item.product.photo[0] %>"
+                                    alt="Product Image" class="img-fluid" width="100"></a></td>
+                              
+                              <td class="product-name">
+                                <%= item.product.productName %>
+                                 
+                              </td>
+
+                              <td class="price" data-price="<%= item.price %>">₹   <%= item.price %></td>
+                              <input type="hidden" id="price<%= item.price %>" value="<%= item.price %>">
+                              <td class="quantity">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <button class="quantity-left-minus btn" type="button" onclick="updateQuantity('<%= item.product._id %>', 'decrease')">-</button>
+                                    </div>
+                                    <input type="text" id="quantity<%= item.product._id %>" name="quantity" class="quantity form-control input-number" value="<%= item.quantity %>" min="1" max="100">
+                                    <div class="input-group-append">
+                                      <button class="quantity-right-plus btn" type="button" onclick="updateQuantity('<%= item.product._id %>', 'increase')">+</button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                            
+                                <p  class="total" id="total<%= item.product._id %>">₹ <%= item.total %></p>
+                                
+                           <input type="hidden" >
+                        </td>
+                            </tr><!-- END TR-->
+                            <% }) %>
+                       
+                          </tbody>
+                        </table>
+                    </div>
+              </div>
+          </div>
+          <div class="row justify-content-start">
+              <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+                  <div class="cart-total mb-3">
+                      <h3>Cart Totals</h3>
+                      <p class="d-flex">
+                          <span >Subtotal</span>
+                          <span id="Subtotal">$20.60</span>
+                      </p>
+                      <p class="d-flex">
+                          <span>Delivery</span>
+                          <span>$0.00</span>
+                      </p>
+                      <!-- <p class="d-flex">
+                          <span>Discount</span>
+                          <span>$3.00</span>
+                      </p> -->
+                      <hr>
+                      <p class="d-flex total-price">
+                        <span>Total</span>
+                        <span id="cart-total">₹ 0.00</span>
+                    </p>
+                  </div>
+                  <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+              </div>
+              <% } else { %>
+                <p>Your cart is empty.</p>
+                <% } %>
+          </div>
+          </div>
+      </section>
+      
+
+
+
+      <script>
+       
+    
+        
+        function updateQuantity(productId, action) {
+            const quantityInput = document.querySelector(`#quantity${productId}`);
+            const currentQuantity = parseInt(quantityInput.value);
+         
+            const data = {
+              qunatity:currentQuantity,
+    
+              }
+              
+            fetch(`/updateqnty/${productId}/${action}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },body:JSON.stringify(data)
+             }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); // Parse the response body as JSON
+            })
+                .then(data => {
+                   
+                    const { success, quantity, total } = data;
+
+                   document.querySelector(`#quantity${productId}`).value=quantity;
+                
+                   document.querySelector(`#total${productId}`).textContent = `₹ ${total}`;
+
+                  
+                   calculateCartTotal();
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+        ///////////////////// cart total
+
+        function calculateCartTotal() {
+    const itemTotals = document.querySelectorAll(".total");
+
+    // Reset cart total
+    cartTotal = 0;
+    Subtotal =0;
+
+    // Calculate cart total by summing up individual item totals
+    itemTotals.forEach((itemTotal) => {
+        const itemTotalValue = parseFloat(itemTotal.textContent.replace("₹", ""));
+        cartTotal += itemTotalValue;
+    });
+    Subtotal=cartTotal
+    // Update the cart total in the HTML
+    document.querySelector("#cart-total").textContent = `₹ ${cartTotal.toFixed(2)}`;
+    document.querySelector("#Subtotal").textContent = `₹ ${Subtotal.toFixed(2)}`;
+}
+
+// Call the calculateCartTotal function initially to set the cart total
+calculateCartTotal();
+
+        //////////////////////////////////////////////////////////////////
+
+
+
+        function removeCartItem(productId) {
+    // Send an AJAX request to the server to remove the product
+    fetch(`/removeCartItem/${productId}`, {
+        method: "DELETE", // Use DELETE HTTP method
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // Handle the response from the backend if needed
+            console.log(data);
+
+            // Remove the corresponding row from the table in the front-end
+            const rowToRemove = document.querySelector(`tr[data-product-id="${productId}"]`);
+            if (rowToRemove) {
+                rowToRemove.remove();
+            }
+            window.location.reload()
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+}
+
+    </script>
+    
+
+
+
+
+<%- include('../layouts/userfooter') %>

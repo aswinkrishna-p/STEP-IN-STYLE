@@ -1,0 +1,168 @@
+<%- include('../layouts/adminheader.ejs') %>
+
+<body>
+   <!-- Sidebar Start -->
+<div class="sidebar pe-4 pb-3">
+    <nav class="navbar bg-light navbar-light">
+        <a href="#" class="navbar-brand mx-4 mb-3">
+            <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i> STEP IN STYLE</h3>
+        </a>
+        <div class="d-flex align-items-center ms-4 mb-4">
+            <div class="position-relative">
+                <!-- <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;"> -->
+                <!-- <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div> -->
+            </div>
+            <div class="ms-3">
+                <!-- <h6 class="mb-0">Jhon Doe</h6> -->
+                <span>Admin</span>
+            </div>
+        </div>
+        <div class="navbar-nav w-100">
+            <a href="/admin/Dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+            <a href="/admin/userlist" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users</a>
+            <a href="/admin/productList" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Products</a>
+            <a href="/admin/categorylist" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Categories</a>
+            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
+            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
+            <a href="/admin/bannerlist" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banners</a>
+            <!-- <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a> -->
+            <form action="/admin/logout" method="get">
+                <button type="submit" class="btn btn-danger" style="margin-left: 30px;">Logout</button>
+              </form>
+        </div>
+    </nav>
+</div>
+<!-- Sidebar End -->
+
+<!-- Content Start -->
+<div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+    <!-- Confirmation Modal -->
+
+
+    <div id="confirmationModal" class="modal center-modal" style="width: 400px; height: 200px; margin-left: 35em;">
+        <div class="modal-content" style="width: 90%; height: 80%; justify-content: center;align-items: center;" >
+          <p id="confirmationMessage"></p>
+          <button id="confirmActionBtn" class="btn btn-primary btn-sm" style="margin-bottom: 5px;">Confirm</button>
+          <button id="cancelActionBtn" class="btn btn-secondary btn-sm">Cancel</button>
+        </div>
+      </div>
+      
+    <!-- User Table -->
+    <div class="table-responsive" style="margin-left: 17em; margin-top: 50px; margin-right: 3em;">
+        <!-- Search Option -->
+        <div class="search-bar">
+            <form class="form-inline" style="margin-left:55em ;" action="/admin/search" method="post">
+              <input class="form-control mr-sm-2" type="text" id="user-search-input" placeholder="Search for a user" name="search">
+              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" >Search</button>
+            </form>
+          </div>
+
+          <% if (data && data.length > 0) { %>
+           
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>ID/Number</th>
+                            <th>Name</th>
+                            <th>Joined Date</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i < data.length; i++) { %>
+                            <tr>
+                                <td><%= i + 1 %></td>
+                                <td>
+                                    <%= data[i].first_name %>
+                                    <%= data[i].last_name %>
+                                </td>
+                                <td><%= data[i].joinedDate.toDateString() %></td>
+                                <td><%= data[i].email %></td>
+                                <td><%= data[i].phone %></td>
+                                <% if (data[i].is_blocked) { %>
+                                    <td class="user-status inactive">InActive</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="getBlockandUnblock('<%= data[i]._id %>',true)">UnBlock</button>
+                                        <!-- <button class="btn btn-info btn-sm" onclick="editUser('<%= data[i]._id %>')">Edit</button> -->
+                                        <!-- <button class="btn btn-danger btn-sm" onclick="deleteUser('<%= data[i]._id %>')">Delete</button> -->
+                                    </td>
+                                <% } else { %>
+                                    <td class="user-status active">Active</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="getBlockandUnblock('<%= data[i]._id %>',false)">Block</button>
+                                        <!-- <button class="btn btn-info btn-sm" onclick="editUser('<%= data[i]._id %>')">Edit</button> -->
+                                        <!-- <button class="btn btn-danger btn-sm" onclick="deleteUser('<%= data[i]._id %>')">Delete</button> -->
+                                    </td>
+                                <% } %>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            
+        <% } else { %>
+            <p>No data available.</p>
+        <% } %>
+    </div> 
+<!-- Content End -->
+
+
+
+<script>
+
+    // Function to show the confirmation modal
+    function showConfirmationModal(message, confirmCallback) {
+    const modal = document.getElementById('confirmationModal');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    const confirmActionBtn = document.getElementById('confirmActionBtn');
+    const cancelActionBtn = document.getElementById('cancelActionBtn');
+
+    confirmationMessage.textContent = message;
+
+    // Add event listeners to confirm and cancel buttons
+    confirmActionBtn.addEventListener('click', function () {
+        confirmCallback(); // Call the callback function to perform the action
+        closeModal(modal);
+    });
+
+    cancelActionBtn.addEventListener('click', function () {
+        closeModal(modal);
+    });
+
+    modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal(modal) {
+    modal.style.display = 'none';
+}
+    function getBlockandUnblock(_id,isblocked) {
+        const actionText = isblocked ? 'Unblock' : 'Block';
+    const message = `Are you sure you want to ${actionText} this user?`;
+    showConfirmationModal(message, function () {
+      $.ajax({
+        url: "/admin/userlist/userstatus",
+        type: "PATCH",
+        data: { _id },
+        success: function (response) {
+          window.location.reload();
+        },
+        error: function (error) {
+          // Handle errors
+          console.log(error.message);
+        }
+      });
+    });
+    }
+  </script>
+
+<%- include('../layouts/adminfooter') %>

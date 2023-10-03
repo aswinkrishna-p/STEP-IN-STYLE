@@ -1,0 +1,64 @@
+
+<%- include('../layouts/userheader') %>
+  
+<div class="hero-wrap hero-bread">
+  <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+              <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span></p>
+              <h1 class="mb-0 bread">OTP Verification</h1>
+          </div>
+      </div>
+  </div>
+</div>
+
+<section class="ftco-section ftco-cart">
+  
+ <div class="container py-5">
+<div class="row justify-content-center">
+  <div class="col-md-6 col-12">
+      <div class="signup my-5 p-5 fs-5 bg-light">
+          <form action="/otp" method="post" class="form-group">
+              <h2 class="text-center fs-3">Verify Your Email</h2>
+         
+              <div class="form-group mt-2">
+                  <label for="email">Email:</label><br>
+                  <input type="email" name="email" id="email"  readonly class="form-control" value="<%= email %>">
+              </div>
+              <div class="form-group my-3">
+                  <label for="otp">OTP:</label><br>
+                  <input type="text" id="otp" placeholder="Enter OTP" name="otp" class="form-control">
+              </div>
+              <div class="signup text-center">
+                  <button type="submit" class="btn btn-dark px-5">Verify Email</button>
+              </div>
+          </form>
+          <button class="btn btn-dark fs-6 mt-3" onclick="resendotp()">Resend OTP</button>
+      </div>
+  </div>
+</div>
+</div>
+</section>
+
+
+<script>
+
+    function resendotp() {
+        const email = document.getElementById('email').value;
+     $.ajax({
+        url:'/verification/resendotp',
+        type:'POST',
+        data:{email:email},
+        success :function(response){
+            window.location.reload();
+        }, error: function (error) 
+        {
+          console.log(error.message);
+        }
+     })   
+    }
+</script>
+
+		
+
+   <%- include('../layouts/userfooter') %>
