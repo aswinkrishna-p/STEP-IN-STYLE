@@ -31,7 +31,7 @@ router.get('/dashboard',loggedin,adminController.getdashboard)
 
 // user management
 
-router.get('/userlist',adminController.getusermanager)
+router.get('/userlist',loggedin,adminController.getusermanager)
 
 router.post('/search',adminController.searchUsers)
 
@@ -39,24 +39,24 @@ router.patch('/userlist/userstatus',adminController.getBlockandUnblock)
 
 // productmanagement
 
-router.get('/productlist',adminController.getProductlist)
+router.get('/productlist',loggedin,adminController.getProductlist)
 
 router.post('/productlist',upload.array('photo',5),adminController.getaddproductPost)
 
-router.get('/addproduct',adminController.getaddproduct)
+router.get('/addproduct',loggedin,adminController.getaddproduct)
 
 router.post('/searchproduct',adminController.SearchProduct)
 
 router.patch('/productlist/productstatus',adminController.productListUnlist)
 
-router.get('/editproduct',adminController.geteditproduct)
+router.get('/editproduct',loggedin,adminController.geteditproduct)
 
 router.post('/productlist/:id',upload.array('photo',5),adminController.editproductpost)
 
 
 //category 
 
-router.get('/categorylist',adminController.getCategorylist)
+router.get('/categorylist',loggedin,adminController.getCategorylist)
 
 // router.get('/addcategory',adminController.getaddcategory)
 
@@ -66,13 +66,33 @@ router.patch('/categorylist/categorystatus',adminController.categoryListUnlist)
 
 // banner
 
-router.get('/bannerlist',adminController.getbannerlist)
+router.get('/bannerlist',loggedin,adminController.getbannerlist)
 
 router.post('/addbanner',upload.single('photo'),adminController.addbanner)
 
 router.post('/editbanner/:id',upload.single('photo'),adminController.editbanner)
 
 router.patch('/bannerlist/deletebanner/',adminController.bannerListUnlist)
+
+router.delete('/bannerlist/deletebanner/:bannerId',adminController.deleteBannerController);
+
+// orders
+
+router.get('/orders',loggedin,adminController.getOrders)
+
+router.post('/update-status/:id',adminController.orderstatus)
+
+// coupons
+
+router.post('/create-coupon', adminController.createCoupon);
+
+router.post('/edit-coupon/:id',adminController.editCoupon)
+
+router.get('/coupons',loggedin,adminController.getCoupons)
+
+router.patch('/coupons/couponstatus',adminController.couponlistunlist)
+
+
 //logout
 
 router.get('/logout',adminController.logout)

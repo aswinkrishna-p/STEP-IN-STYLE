@@ -51,8 +51,36 @@
                               <a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
                           </p>
                       </div>
-                      <input type="hidden" name="" id="price<%= product._id %>" value="<%= product.price %>">
-                  <p class="price"><span>₹ <%= product.price %></span></p>
+                      
+                      <input type="hidden" name="price" id="price<%= product._id %>" value="<%= product.price %>">
+                      <% if (product.offer && product.expiryDate) { %>
+                        <% if (currentDate <=product.expiryDate) { %>
+                            <!-- Display your badge or logo here -->
+                            <div class="p-2">
+                                <span>Orginal price :</span><span class="font-weight-semi-bold  mt-5"
+                                    style="font-size: 22px;"> &#8377 <del>
+                                        <%= product.orginalPrice %>
+                                    </del> </span><br>
+                            </div>
+                            <div class="p-2">
+                                <span>Discount price :</span><span class="font-weight-semi-bold text-dark p-2 mt-5"
+                                    style="font-size: 26px;"> &#8377 <%= product.discountPrice %> </span>
+
+                            </div>
+
+                            <div class=" d-flex align-items-center justify-content-center"><i
+                                    class="lni lni-offer p-1  " style="color: rgb(234, 9, 16); font-size: 22px;"></i>
+                                <span class="pl-2" style="color: rgb(255, 0, 17); font-size: 24px;">Special offer of <%=
+                                        product.offer %> %</span>
+                            </div>
+                            <% } else{ %>
+                                <p class="price"><span>₹ <%= product.price %></span></p>
+                                        <% } %>
+                                            <% }else{ %>
+                                                <p class="price"><span>₹ <%= product.price %></span></p>
+                                                        <% } %>
+                    
+                  
                   <p> <%= product.description %></p>
                   <p> </p>
                       <div class="row mt-4">
@@ -70,7 +98,7 @@
                   </div>
                           </div>
                           <div class="w-100"></div>
-                          <div class="input-group col-md-6 d-flex mb-3">
+                          <!-- <div class="input-group col-md-6 d-flex mb-3">
                    <span class="input-group-btn mr-2">
                       <button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
                      <i class="ion-ios-remove"></i>
@@ -82,7 +110,7 @@
                        <i class="ion-ios-add"></i>
                    </button>
                    </span>
-                </div>
+                </div> -->
                 <div class="w-100"></div>
                 <div class="col-md-12">
                     <p style="color: #000;">80 piece available</p>

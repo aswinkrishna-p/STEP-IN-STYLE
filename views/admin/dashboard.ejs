@@ -22,8 +22,8 @@
             <a href="/admin/userlist" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users</a>
             <a href="/admin/productList" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Products</a>
             <a href="/admin/categorylist" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Categories</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
+            <a href="/admin/coupons" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
+            <a href="/admin/orders" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
             <a href="/admin/bannerlist" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banners</a>
             <!-- <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a> -->
             <form action="/admin/logout" method="get">
@@ -37,140 +37,180 @@
 
 
 
+<div class="row" style="margin-top: -89px; margin-left: 18em;">
+    <style>
+      .hover-card:hover {
+          background-color: #f0f0f0; /* Change the background color on hover */
+          transition: background-color 0.3s ease; /* Add a smooth transition effect */
+      }
+  </style>
 
-
-
-
-
-
-
-
-
-        <!-- Content Start -->
-        <!-- <div class="content"> -->
-            <!-- Navbar Start -->
-            <!-- <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-                    <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
-                </a>
-                <a href="#" class="sidebar-toggler flex-shrink-0">
-                    <i class="fa fa-bars"></i>
-                </a>
-                <form class="d-none d-md-flex ms-4">
-                    <input class="form-control border-0" type="search" placeholder="Search">
-                </form> -->
-                <!-- <div class="navbar-nav align-items-center ms-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-envelope me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Message</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all message</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-bell me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Notificatin</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
-                        </div>
-                    </div> -->
-                    <!-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
-                        </div>
-                    </div>
-                </div>
-            </nav> -->
-            <!-- Navbar End -->
-
-
-            <!-- Blank Start -->
-            <!-- <div class="container-fluid pt-4 px-4">
-                <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        <h3>This is blank page</h3>
-                    </div>
-                </div>
-            </div> -->
-            <!-- Blank End -->
-
-
-            <!-- Footer Start -->
-            <!-- <div class="container-fluid pt-4 px-4">
-                <div class="bg-light rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end"> -->
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/ -->
-                            <!-- Designed By <a href="https://htmlcodex.com">HTML Codex</a> -->
-                        </div>
-                    </div>
-                </div>
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4" style="padding-top: 100px; margin-top: 100px;">
+      <div class="card border-left-primary shadow py-2 hover-card" style="width: 228px;height: 97px;">
+        <!-- Adjust width and height -->
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center  d-flex justify-content-center align-items-cente">
+                TOTAL ORDERS</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800 text-center  d-flex justify-content-center align-items-cente">
+                <%= totalOrders %>
+              </div>
             </div>
-            <!-- Footer End -->
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
         </div>
-        <!-- Content End -->
-
-
-        <!-- Back to Top -->
-        <!-- <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a> -->
+      </div>
     </div>
 
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4" style="padding-top: 100px; margin-top: 100px;">
+      <div class="card border-left-primary shadow py-2 hover-card" style="width: 228px;height: 97px;">
+        <!-- Adjust width and height -->
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center  d-flex justify-content-center align-items-cente">
+                TOTAL PRODUCTS</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800 text-center  d-flex justify-content-center align-items-cente">
+                <%= totalProducts %>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4" style="padding-top: 100px; margin-top: 100px;">
+      <div class="card border-left-primary shadow py-2 hover-card" style="width: 228px;height: 97px;">
+        <!-- Adjust width and height -->
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center  d-flex justify-content-center align-items-cente">
+                TOTAL SALES</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800 text-center  d-flex justify-content-center align-items-cente">₹<%=totalSales%>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-comments fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4" style="padding-top: 100px; margin-top: 100px;">
+      <div class="card border-left-primary shadow py-2 hover-card" style="width: 228px;height: 97px;">
+        <!-- Adjust width and height -->
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <a href="/admin/dashboard/sales" style="text-decoration: none;"><div  class="text-xs font-weight-bold text-danger text-uppercase text-center mt-2 d-flex justify-content-center align-items-center">SALES REPORTS</div></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+    <div class="chart" style="width: 1000px; margin-left: 20em;">
+      <canvas id="myChart"  ></canvas>
+      <input type="hidden" name="monthlySales" id="monthlySales" value="<%= JSON.stringify(monthSales) %>">
+    </div>
+
+    <div class="text-center" style="width: 30%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); height: 350px; margin-left: 20em; margin-top: 50px;">
+      <div class=" bg-light rounded p-3 w-100 " >
+      
+          <canvas id="myCharts" style="margin-top:10px;"></canvas>
+          <div id="userCounts" data-blocked-count="<%= blockedUsers %>"
+            data-non-blocked-count="<%= unblockedUsers %>"></div>
+            
+        </div>
+    </div>
+
+    <!-- <div class="pie-chart" style="width: 700px; height: 400px; margin-left: 20em;margin-top:8em;">
+      
+      <canvas id="myCharts"></canvas>
+      
+      
+    </div> -->
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+    <script>
+      const ctxi = document.getElementById('myCharts');
+      const userCountsElement = document.getElementById('userCounts');
+        const blockedUserCount = parseInt(userCountsElement.getAttribute('data-blocked-count'));
+        const nonBlockedUserCount = parseInt(userCountsElement.getAttribute('data-non-blocked-count'));
+      const totalUserCount = blockedUserCount + nonBlockedUserCount;
+      new Chart(ctxi, {
+        type: 'pie',
+        data: {
+          labels: ['Blocked Users', 'Non-Blocked Users', "All Users"],
+          datasets: [{
+            data: [blockedUserCount, nonBlockedUserCount, totalUserCount],
+            backgroundColor: ['#f00', '#1fe074', "#0069c0"],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        }
+      });
+      
+      // bar graph ///////////////////////////////////////////////////////
+      
+      const ctx = document.getElementById('myChart');
+      let monthlySales = document.getElementById('monthlySales').value;
+      let monthlySalesArray = JSON.parse(monthlySales);
+      let monthlySalesAmount = []
+      for (let i = 0; i <= 12; i++) {
+              for (let j = 0; j < monthlySalesArray.length; j++) {
+                if ((monthlySalesArray[j].month - 1) == i) {
+                  monthlySalesAmount[i] = monthlySalesArray[j].monthlySales
+                  break
+                }
+              }
+              if (!monthlySalesAmount[i]) {
+                monthlySalesAmount[i] = 0
+              }
+            }
+
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: `Sales of Month on ${monthlySalesArray[0].year}`,
+            data: monthlySalesAmount,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+     
     <%- include('../layouts/adminfooter') %>

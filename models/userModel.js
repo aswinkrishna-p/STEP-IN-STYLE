@@ -1,4 +1,5 @@
 const mongoose= require("mongoose")
+const { Decimal128 } = mongoose.Types;
 
 const user =mongoose.Schema({
 
@@ -33,15 +34,17 @@ const user =mongoose.Schema({
     },
     defaultAddress:{
         type: String
-    },joinedDate:{
+    },
+    joinedDate:{
         type :Date,
         required:true
-    },wishlist: [
+    },
+    wishlist: [
         {
-            product: {
-                type: mongoose.Types.ObjectId,
-                ref: 'product'
-            }
+         product: {
+         type: mongoose.Types.ObjectId,
+         ref: 'product'
+         }
         }],
     cart:[ {
         product: {
@@ -58,7 +61,35 @@ const user =mongoose.Schema({
             type:Number
         },
         total:Number
-    }]
+    }],
+    address: [{
+
+        firstname:{type:String},
+        lastname:{type:String},
+        house:{type:String},
+        post: { type: Number },
+        city: { type: String },
+        state: { type: String },
+        district: { type: String },
+        contact:{type:Number},
+        isDefault: {
+            type: Boolean,
+            default: false, // Set it to false by default
+          },
+  }],
+  wallet: {
+
+    balance: {
+        type: Decimal128,
+    default: 0.0
+    },
+    transactions: [String]
+},
+ referral:{
+    type:String
+},
+
+  usedCoupons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'coupon' }],
 })
 
    module.exports = mongoose.model("User",user);

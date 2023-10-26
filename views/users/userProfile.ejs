@@ -1,0 +1,126 @@
+
+<%- include('../layouts/userheader') %>
+
+<div class="hero-wrap hero-bread" >
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="/">Home</a></span></p>
+          <h1 class="mb-0 bread"> My account</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="list-group" style="width: 80%;">
+                <a href="/userprofile" class="list-group-item list-group-item-action">
+                    <i class="fas fa-user"></i> Account Details
+                </a>
+                <a href="/address-book" class="list-group-item list-group-item-action">
+                    <i class="fas fa-address-card"></i> Delivery Addresses
+                </a>
+                <a href="/orders" class="list-group-item list-group-item-action">
+                    <i class="fas fa-shopping-cart"></i> My Orders
+                </a>
+            </div>
+            <% if (user.referral) { %>
+                <div class=" mt-4" style="display: flex; justify-content: flex-end; width: 90%;">
+                    <div class="card border mb-3" style="max-width: 17rem;">
+                        <div class="card-header">Referral Link</div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <a href="#" id="referralLink" style="color: blue; cursor: pointer;"><%= referralLink %></a>
+                                <p id="copyMessage" style="display: none; color: green;">Link copied to clipboard</p>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            <a href="/logout">
+                <button id="logoutBtn" class="btn btn-danger mt-4">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </a>
+        </div>
+
+        
+        
+
+        <!-- Main Content -->
+        <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px; padding-left: 20px; margin-bottom: 2em;">
+            
+            <%if(user ){%>
+                <div class="row m-right rounded d-flex justify-content-between align-items-center ">
+                    <h2>Account Details</h2>
+                    <div class="col-md-3 offset-md p-0 m-0">
+                        <div class="card text-center">
+                            <div class="card-body p-0 m-0">
+                                <h5 class="card-title">Your Wallet</h5>
+                                <h1 class="display-4">₹ <%if(user.wallet.balance > 0){%>
+                                    <%=user.wallet.balance%>
+                              <%  }else {%> 0.00
+                              <%}%>
+                                </h1>
+                                <p class="card-text">Available Balance</p>
+                                <!-- <a href="#" class="btn btn-primary">View Transactions</a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <%}%>
+            <form id="profileForm">
+                <!-- Account Details -->
+                <div id="accountDetails" class="profile-section">
+                  
+                    <!-- First Name -->
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user.first_name || '' %>" required readonly>
+                    </div>
+            
+                    <!-- Last Name -->
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user.last_name || '' %>" required readonly>
+                    </div>
+            
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= user.email || '' %>" required readonly>
+                    </div>
+            
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" placeholder="******" id="password" name="password" required readonly>
+                    </div>
+            
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" value="<%= user.phone || '' %>" readonly>
+                    </div>
+                </div>
+                <!-- Edit and Update Buttons -->
+                <button type="button" id="editProfileBtn" class="btn btn-primary">Edit Profile</button>
+                <button type="button" id="updateProfileBtn" class="btn btn-success" style="display: none;">Update Profile</button>
+            </form>
+            
+        </div>
+       
+    </div>
+  
+</div>
+
+
+
+
+<!-- <script src="script.js"></script> -->
+
+<%- include('../layouts/userfooter') %>

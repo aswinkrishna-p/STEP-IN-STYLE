@@ -28,8 +28,8 @@
             <a href="/admin/userlist" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users</a>
             <a href="/admin/productList" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Products</a>
             <a href="/admin/categorylist" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Categories</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
-            <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
+            <a href="/admin/coupons" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
+            <a href="/admin/orders" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
             <a href="/admin/bannerlist" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banners</a>
             <!-- <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a> -->
         </div>
@@ -76,9 +76,9 @@
                 <div class="form-group">
                     <label for="productCategory" class="form-label">Product Category</label>
                     <select class="form-select" id="productCategory" required name="category">
-                      <option value="">Select a category</option>
+                      <option value="<%= categories%>">Select a category</option>
                       <%  categories.forEach(cat =>{%>
-                      <option value="<%= cat%>"><%= cat %></option>
+                        <option value="<%= cat %>" <% if (cat === product.category) { %>selected<% } %>><%= cat %></option>
                       <% }) %>
                       
                     </select>
@@ -88,9 +88,9 @@
             <div class="form-group">
                 <label for="productgender" class="form-label"> Gender</label>
                 <select class="form-select" id="gender" required name="gender">
-                  <option value="">Select a gender</option>
+                  <option value="<%= genders %>">Select a gender</option>
                   <%  genders.forEach(gender =>{%>
-                  <option value="<%= gender %>"><%= gender %></option>
+                    <option value="<%= gender %>" <% if (gender === product.gender) { %>selected<% } %>><%= gender %></option>  
                   <% }) %>
                  
                 </select>
@@ -100,6 +100,22 @@
                     <label for="productQuantity" class="form-label">Product Stock</label>
                     <input type="number" class="form-control" min="1" max="500" value="<%= product.stock%>" id="productQuantity" placeholder="Enter product stock" required name="stock">
                   </div>
+                   <!-- Offer -->
+            <div class="form-group">
+                <label for="productOffer" class="form-label">Offer</label>
+                <input type="number" class="form-control" id="productOffer" placeholder="Enter product offer" name="offer" value="<%= product.offer %>">
+            </div>
+            <div class="form-group">
+                <label for="productOffer" class="form-label">Product Orginal Price</label>
+                <input type="number" class="form-control" id="orginalPrice" placeholder="Enter product offer" name="orginalPrice" value="<%= product.orginalPrice %>">
+            </div>
+            <!-- Expiry Date -->
+           
+           <div class="form-group">
+               <label for="productExpiryDate" class="form-label">Expiry Date</label>
+               <input type="date" class="form-control" id="productExpiryDate" required name="expiryDate" value="<%= product.expiryDate ? product.expiryDate.toISOString().split('T')[0] : '' %>">
+           </div>
+
                 <!-- Product Description (Pre-fill with current product description) -->
                 <div class="form-group">
                     <label for="productDescription" class="form-label">Product Description</label>

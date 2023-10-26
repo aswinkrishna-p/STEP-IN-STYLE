@@ -1,0 +1,423 @@
+<%- include('../layouts/userheader') %>
+
+
+
+<div class="hero-wrap hero-bread" >
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="/">Home</a></span></p>
+          <h1 class="mb-0 bread"> My addres book</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- addressBook.ejs -->
+<div class="container">
+  <div class="row">
+     
+      <div class="col-md-3">
+          <div class="list-group" style="width: 80%;">
+              <a href="/userprofile" class="list-group-item list-group-item-action">
+                  <i class="fas fa-user"></i> Account Details
+              </a>
+              <a href="/address-book" class="list-group-item list-group-item-action">
+                  <i class="fas fa-address-card"></i> Delivery Addresses
+              </a>
+              <a href="/orders" class="list-group-item list-group-item-action">
+                  <i class="fas fa-shopping-cart"></i> My Orders
+              </a>
+          </div>
+          <a href="/logout">
+              <button id="logoutBtn" class="btn btn-danger mt-4">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+          </a>
+      </div>
+<!-- addressBook.ejs -->
+<div class="col-md-9">
+  <!-- <a href="/add-new-address" class="btn btn-primary" >Add New Address</a> -->
+  <a href="#" id="addNewAddressLink" class="btn btn-primary" style="margin-top: 10px; margin-bottom: 12px; " >Add a New Address</a> 
+
+<% if (user && user.address && user.address.length > 0) { %>
+
+    <div class="row" style="width: 100%; " >
+      <% user.address.forEach((address, index) => { %>
+        <div class="col-md-4 col-mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= address.firstname %> <%= address.lastname %>
+              </h5>
+              <p class="card-text">
+                <strong>Street Address:</strong> <%= address.house %><br>
+                <strong>Town/City:</strong> <%= address.city %><br>
+                <strong>State:</strong> <%= address.state %><br>
+                <strong>Postcode/ZIP:</strong> <%= address.post %><br>
+                <strong>District:</strong> <%= address.district %><br>
+                <strong>Contact:</strong> <%= address.contact %>
+              </p>
+              <!-- Radio button for selecting the address -->
+              <div class="form-check">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="selectedAddress"
+                  id="address<%= index %>"
+                  value="<%= address._id %>"
+                  onclick="setDefaultAddress('<%= address._id %>')"
+                  <% if (address.isDefault) { %>checked<% } %>
+                >
+                <label class="form-check-label" for="address<%= index %>">Select Address</label>
+              </div>
+              <!-- Buttons for editing and deleting the address -->
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary ml-2" data-toggle="modal" data-target="#editAddressModal<%= address._id %>">Edit</button>
+                <button type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#deleteAddressModal<%= index %>">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Modal for "Add New Address" -->
+<div class="modal fade" id="addNewAddressModal" tabindex="-1" role="dialog" aria-labelledby="addNewAddressModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="addNewAddressModalLabel">Add New Address</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- Your form fields for adding a new address -->
+              <form id="newAddressForm">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <!-- First Name -->
+                          <div class="form-group">
+                              <label for="newFirstName">First Name</label>
+                              <input type="text" class="form-control" id="newFirstName" name="newFirstName" required>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <!-- Last Name -->
+                          <div class="form-group">
+                              <label for="newLastName">Last Name</label>
+                              <input type="text" class="form-control" id="newLastName" name="newLastName" required>
+                          </div>
+                      </div>
+                  </div>
+   
+                  <!-- Street Address -->
+                  <div class="form-group">
+                      <label for="newStreetAddress">Street Address</label>
+                      <input type="text" class="form-control" id="newStreetAddress" name="newStreetAddress" placeholder="House number and street name">
+                  </div>
+                  
+                  <!-- State -->
+                  <div class="row">
+                      <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="newState">State</label>
+                      <input type="text" class="form-control" id="newState" name="newState" placeholder="State">
+                  </div>
+                  </div>
+                  <!-- Town/City -->
+                  <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="newTownCity">Town / City</label>
+                      <input type="text" class="form-control" id="newTownCity" name="newTownCity" placeholder="Town / City">
+                  </div>
+                  </div>
+              </div>
+
+                  <div class="row">
+                      <div class="col-md-6">
+                          <!-- Postcode/ZIP -->
+                          <div class="form-group">
+                              <label for="newPostcodeZip">Postcode / ZIP *</label>
+                              <input type="text" class="form-control" id="newPostcodeZip" name="newPostcodeZip" placeholder="Postcode / ZIP" required>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <!-- District -->
+                          <div class="form-group">
+                              <label for="newDistrict">District</label>
+                              <input type="text" class="form-control" id="newDistrict" name="newDistrict" placeholder="District">
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Phone -->
+                  <div class="form-group">
+                      <label for="newPhone">Phone</label>
+                      <input type="text" class="form-control" id="newPhone" name="newPhone" placeholder="Phone">
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="saveNewAddressBtn">Save Address</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+    <!-- Edit Address Modal -->
+<div class="modal fade" id="editAddressModal<%= address._id %>" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel<%= index %>" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editAddressModalLabel<%= index %>">Edit Address</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- Add a form here for editing address fields -->
+              <form action="/editaddress" method="POST" id="editAddressForm">
+              
+                  <!-- Include input fields for editing address details -->
+                  <input type="hidden" name="addressId" value="<%= address._id %>">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="editFirstname">First Name:</label>
+                              <input type="text" id="editFirstname" name="editFirstname" class="form-control" value="<%= address.firstname %>">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="editLastname">Last Name:</label>
+                              <input type="text" id="editLastname" name="editLastname" class="form-control" value="<%= address.lastname %>">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="editHouse">Street Address:</label>
+                      <input type="text" id="editHouse" name="editHouse" class="form-control" value="<%= address.house %>">
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="editCity">Town/City:</label>
+                              <input type="text" id="editCity" name="editCity" class="form-control" value="<%= address.city %>">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="editState">State:</label>
+                              <input type="text" id="editState" name="editState" class="form-control" value="<%= address.state %>">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="editPost">Postcode/ZIP:</label>
+                      <input type="text" id="editPost" name="editPost" class="form-control" value="<%= address.post %>">
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="editDistrict">District:</label>
+                              <input type="text" id="editDistrict" name="editDistrict" class="form-control" value="<%= address.district %>">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="editContact">Contact:</label>
+                              <input type="text" id="editContact" name="editContact" class="form-control" value="<%= address.contact %>">
+                          </div>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" form="editAddressForm" class="btn btn-primary">Save Changes</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+         <!-- Delete Address Confirmation Modal -->
+<div class="modal fade" id="deleteAddressModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteAddressModalLabel">Confirm Deletion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this address?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" onclick="performdeleteAddress('<%= address._id %>')">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+    </div>
+    </div>
+
+
+      <% }); %>
+    </div>
+  <% } else { %>
+    <div class="alert alert-warning">
+      You don't have any addresses in your address book.
+    </div>
+  <% } %>
+  
+  
+
+ 
+  
+  
+<script>
+
+function setDefaultAddress(addressId) {
+    fetch(`/set-default-address/${addressId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Successfully set the address as default
+          // You can provide some visual feedback to the user here
+        } else {
+          // Handle errors if needed
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+
+
+  function performdeleteAddress(addressId) {
+  // Send an AJAX request to delete the address
+  $.ajax({
+    type: 'DELETE',
+    url: `/delete-address/${addressId}`, // Replace with the actual address ID
+    success: function () {
+      // Address deleted successfully, update the UI (remove the address card, etc.)
+      // You may need to refresh the address book or update it on the frontend.
+      // Close the confirmation modal
+      $('#deleteAddressModal').modal('hide');
+    },
+    error: function (error) {
+      console.error('Error deleting address:', error);
+    },
+  });
+}
+
+
+
+
+  function showDeleteModal(addressId) {
+  // Set the address ID in the hidden field
+  $('#deleteAddressId').val(addressId);
+
+  // Show the confirmation modal
+  $('#deleteAddressModal').modal('show');
+}
+
+
+</script>
+
+<!-- //////////////////////////////////////////// add new address ///////////////////////////////////////////////////// -->
+
+
+<script>
+
+  // Function to show the "Add New Address" modal
+  function showAddNewAddressModal() {
+      $('#addNewAddressModal').modal('show');
+  }
+
+  // Function to hide the "Add New Address" modal
+  function hideAddNewAddressModal() {
+      $('#addNewAddressModal').modal('hide');
+  }
+
+  // Add click event listener to the "Add a New Address" link
+  document.getElementById('addNewAddressLink').addEventListener('click', showAddNewAddressModal);
+
+  // Function to handle form submission for adding a new address
+  function saveNewAddress() {
+      // Extract form data
+      const newAddressData = {
+          newFirstName: document.getElementById('newFirstName').value,
+          newLastName: document.getElementById('newLastName').value,
+          newStreetAddress: document.getElementById('newStreetAddress').value,
+          newPostcodeZip: document.getElementById('newPostcodeZip').value,
+          newTownCity: document.getElementById('newTownCity').value,
+          newState: document.getElementById('newState').value,
+          newDistrict: document.getElementById('newDistrict').value,
+          newPhone: document.getElementById('newPhone').value
+      };
+
+      // Send the data to the server using fetch
+      fetch('/add-address', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newAddressData)
+      })
+      .then(response => response.json())
+      .then(data => {
+          // Handle the response from the server
+          if (data.success) {
+              // Address added successfully, you can perform additional actions if needed
+              console.log('Address added successfully');
+
+              // Hide the modal after successful submission
+              hideAddNewAddressModal();
+          } else {
+              // Handle errors or display error messages to the user
+              console.error('Error adding address:', data.message);
+          }
+      })
+      .catch(error => {
+          console.error('An error occurred:', error);
+      });
+  }
+
+  // Add click event listener to the "Save Address" button within the modal
+  document.getElementById('saveNewAddressBtn').addEventListener('click', saveNewAddress);
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('../layouts/userfooter') %>

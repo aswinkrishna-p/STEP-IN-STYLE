@@ -22,8 +22,7 @@ const productSchema =mongoose.Schema({
         type:String
     },
     photo:{
-        type:[String],
-        
+       type:[String], 
     },
     listed:{
         type:Boolean,
@@ -31,6 +30,22 @@ const productSchema =mongoose.Schema({
     },
     stock:{
         type:Number
+    },
+    offer:{
+        type: Number,
+        default: 0,
+    },
+    expiryDate:{
+        type : Date ,
+        
+    },
+    discountPrice:{
+        type:Number,
+        default : 0
+    },
+    orginalPrice:{
+        type:Number,
+        default:0
     }
 
 })

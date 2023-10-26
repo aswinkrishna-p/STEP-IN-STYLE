@@ -1,0 +1,113 @@
+<%- include('../layouts/userheader') %>
+
+
+<div class="hero-wrap hero-bread" >
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-9 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="/">Home</a></span></p>
+          <h1 class="mb-0 bread"> My orders</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="list-group" style="width: 80%;">
+                <a href="/userprofile" class="list-group-item list-group-item-action">
+                    <i class="fas fa-user"></i> Account Details
+                </a>
+                <a href="/address-book" class ="list-group-item list-group-item-action">
+                    <i class="fas fa-address-card"></i> Delivery Addresses
+                </a>
+                <a href="/orders" class="list-group-item list-group-item-action">
+                    <i class="fas fa-shopping-cart"></i> My Orders
+                </a>
+            </div>
+            <a href="/logout">
+                <button id="logoutBtn" class="btn btn-danger mt-4">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </a>
+        </div>
+
+        <!-- Main Content (Order Section) -->
+        <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px;">
+            <!-- Order Section -->
+            <section>
+                <div class="container">
+                    <div class="order-list" style="margin-top: 5rem;">
+                        <% if (orders.length > 0) { %>
+                            <% orders.forEach((order) => { %>
+                                <!-- Order Item -->
+                                <div class="order-item" style="background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; margin-bottom: 20px;">
+                                    <div class="order-products">
+                                        <!-- Loop through order products -->
+                                        <div class="order-num">
+                                            <p class="text-muted mb-0" style="font-size: 14px; border-bottom: #ddd solid; width: 18%;">
+                                                Order No: <%= order._id.toString().substring(0, 6) %> <!-- Adjust the length as needed -->
+                                            </p>
+                                        </div>
+                                        <% order.products.forEach((product) => { %>
+                                            <div class="product-details" style="display: flex; align-items: center; justify-content: space-between; margin: 10px 0;">
+                                                <!-- <div class="product-image">
+                                                    <img src="/images/<%= product.product.photo[0] %>" alt="<%= product.name %>" style="max-width: 80px; max-height: 80px; margin-right: 10px;">
+                                                </div> -->
+                                               
+                                                <div class="product-details">
+                                                    <h3 class="product-name" style="font-size: 1.2rem; margin: 0;"><%= product.name %></h3>
+                                                </div>
+                                                <p class="product-price" style="color: #636363;">Price: ₹<%= product.price %></p>
+                                               
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                    <div class="order-details" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                        <p class="order-status text-<%= order.orderStatus === 'Cancelled' ? 'danger' : 'secondary' %>">Order Status: <%= order.orderStatus %></p>
+                                        <div class="total">
+                                            Total Amount: ₹<%= order.total %>
+                                        </div>
+                                        <p class="order-date" style="color: #636363;">Date: <%= order.orderDate.toDateString() %></p>
+                                    </div>
+                                    <!-- Display total amount and shipping address only once per order -->
+                                    <div class="product-total" style="display: flex; justify-content: space-between; align-items: center;border-top: #ddd solid;">
+                                        <div class="address">
+                                            Ship to: <%= order.address[0].name %>
+                                        </div>
+                                        <div class="invoice mt-2">
+                                            <% if (order.orderStatus === "Cancelled" || order.orderStatus === "Returned") { %>
+                                                <!-- Code to be executed if order status is "Cancelled" or "Returned" -->
+                                            <% } else { %>
+                                                <a class="btn btn-secondary" href="/orders/invoice/<%= order._id %>">Invoice</a>
+                                            <% } %>
+                                        </div>
+                                        <div class="view-details-button mt-2" >
+                                            <a href="/orders/orderDetail/<%= order._id %>" class="btn btn-primary">View Details</a>
+                                        </div>
+                                </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <div class="no-orders-message" style="text-align: center;">
+                                <h3>No orders</h3>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<%- include('../layouts/userfooter') %>
+
+

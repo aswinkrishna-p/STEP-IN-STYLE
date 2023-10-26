@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-9 ftco-animate text-center">
-            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Shop</span></p>
+            <p class="breadcrumbs"><span class="mr-2"><a href="/">Home</a></span> <span>Shop</span></p>
           <h1 class="mb-0 bread">Shop</h1>
         </div>
         
@@ -63,7 +63,16 @@
                               <h3><a href="#"><%= product.productName %></a></h3>
                               <div class="pricing">
                                   <p class="price"><span>₹ <%= product.price %></span></p>
+
+                                  <% if (product.offer && product.expiryDate) { %>
+                                    <% if (currentDate <= product.expiryDate) { %>
+                                        <!-- Display your badge or logo here -->
+                                        <i class="lni lni-offer" style="color: red; font-size: 20px;"></i>
+                                    
+                                    <% } %>
+                                <% } %>
                               </div>
+
                               <p class="bottom-area d-flex px-3">
                                <% if(user) {%>
 

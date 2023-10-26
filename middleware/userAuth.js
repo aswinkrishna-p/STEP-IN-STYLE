@@ -36,9 +36,39 @@ const is_blocked = async (req, res, next) => {
     }
 };
 
+
+const loggedin = (req ,res,next) =>{
+    try {
+        
+        if(req.session.user){
+            next()
+        }else {
+            return res.redirect('/login')
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}  
+
+const loggedout = (req ,res, next) =>{
+    try {
+        if(!req.session.user){
+            next()
+        }else{
+
+            return res.redirect('/')
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = is_blocked;
 
 
 module.exports={
-    is_blocked
+    is_blocked,
+    loggedin,
+    loggedout
 }

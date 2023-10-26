@@ -32,7 +32,7 @@ function addToWishlist(productId) {
 
   function addtoCart(id) {
     const price = document.querySelector(`#price${id}`).value;
-  
+  console.log('priceeeeeeeeee',price);
     const data = {
       productid: id,
       size: 1,
@@ -71,3 +71,19 @@ function addToWishlist(productId) {
       });
   }
 
+// JavaScript (script.js)
+
+// const editProfileBtn = document.getElementById('editProfileBtn');
+// const updateProfileBtn = document.getElementById('updateProfileBtn');
+// const formFields = document.querySelectorAll('.form-control');
+
+// editProfileBtn.addEventListener('click', function () {
+//     // Toggle the fields' disabled state
+//     formFields.forEach(field => {
+//         field.disabled = !field.disabled;
+//     });
+
+//     // Toggle the visibility of buttons
+//     editProfileBtn.style.display = 'none';
+//     updateProfileBtn.style.display = 'block';
+// });

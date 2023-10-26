@@ -1,0 +1,269 @@
+
+<%- include('../layouts/adminheader') %>
+
+<body>
+    <!-- Sidebar Start -->
+ <div class="sidebar pe-4 pb-3">
+     <nav class="navbar bg-light navbar-light">
+         <a href="index.html" class="navbar-brand mx-4 mb-3">
+             <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>STEP IN STYLE</h3>
+         </a>
+         <div class="d-flex align-items-center ms-4 mb-4">
+             <div class="position-relative">
+                 <!-- <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;"> -->
+                 <!-- <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div> -->
+             </div>
+             <div class="ms-3">
+                 <!-- <h6 class="mb-0">Jhon Doe</h6> -->
+                 <span>Admin</span>
+             </div>
+         </div>
+         <div class="navbar-nav w-100">
+             <a href="/admin/Dashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+             <a href="/admin/userlist" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Users</a>
+             <a href="/admin/productList" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Products</a>
+             <a href="/admin/categorylist" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Categories</a>
+             <a href="/admin/coupons" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Coupons</a>
+             <a href="/admin/orders" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Orders</a>
+             <a href="/admin/bannerlist" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Banners</a>
+             <!-- <a href="/admin/logout" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Logout</a> -->
+             <form action="/admin/logout" method="get">
+                 <button type="submit" class="btn btn-danger" style="margin-left: 30px;">Logout</button>
+               </form>
+         </div>
+     </nav>
+ </div>
+ <!-- Sidebar End -->
+
+
+
+ 
+    <!-- Confirmation Modal -->
+
+    <div id="confirmationModal" class="modal center-modal" style="width: 400px; height: 200px; margin-left: 35em;">
+        <div class="modal-content" style="width: 90%; height: 80%; justify-content: center;align-items: center;" >
+          <p id="confirmationMessage"></p>
+          <button id="confirmActionBtn" class="btn btn-primary btn-sm" style="margin-bottom: 5px;">Confirm</button>
+          <button id="cancelActionBtn" class="btn btn-secondary btn-sm">Cancel</button>
+        </div>
+      </div>
+ 
+ <!-- Content Start -->
+ 
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <!-- Set the desired width for the form -->
+                <div class="container mt-3 table-bordered" style="margin-left: 5em;">
+                    <h2>Create New coupon</h2>
+                    <!-- Add Coupon Form -->
+                    <form action="/admin/create-coupon" method="POST">
+                        <!-- Coupon Code -->
+                        <div class="form-group">
+                            <label for="couponCode">Coupon Code</label>
+                            <input type="text" class="form-control" id="couponCode" name="code" required>
+                        </div>
+                        <!-- Coupon Type -->
+                        <div class="form-group">
+                            <label for="couponType">Coupon Type</label>
+                            <select class="form-control" id="couponType" name="type" required>
+                                <option value="Percentage">Percentage</option>
+                                <option value="Fixed Amount">Fixed Amount</option>
+                            </select>
+                        </div>
+                        <!-- Coupon Discount -->
+                        <div class="form-group">
+                            <label for="couponDiscount">Discount</label>
+                            <input type="number" class="form-control" id="couponDiscount" name="discount" required>
+                        </div>
+                        <!-- Minimum Purchase -->
+                        <div class="form-group">
+                            <label for="minPurchase">Minimum Purchase</label>
+                            <input type="number" class="form-control" id="minPurchase" name="min" required>
+                        </div>
+                        <!-- Expiry Date -->
+                        <div class="form-group">    
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="date" class="form-control" id="expiryDate" name="expiry" required>
+                        </div>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Add Coupon</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- edit coupons -->
+    <% coupons.forEach(coupon => { %>
+        <!-- Modal for editing a coupon -->
+        <div class="modal fade" id="editCouponModal<%= coupon._id %>" tabindex="-1" aria-labelledby="editCouponModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form for editing a coupon -->
+                        <form action="/admin/edit-coupon/<%= coupon._id %>" method="POST">
+                            <!-- Coupon Code -->
+                            <div class="form-group">
+                                <label for="editCouponCode" class="form-label">Coupon Code</label>
+                                <input type="text" class="form-control" id="editCouponCode" name="code" value="<%= coupon.code %>">
+                            </div>
+                            <!-- Coupon Type -->
+                            <div class="form-group">
+                                <label for="editCouponType" class="form-label">Coupon Type</label>
+                                <select class="form-select" id="editCouponType" name="type">
+                                    <option value="Percentage" <%= coupon.type === 'Percentage' ? 'selected' : '' %>>Percentage</option>
+                                    <option value="Fixed Amount" <%= coupon.type === 'Fixed Amount' ? 'selected' : '' %>>Fixed Amount</option>
+                                </select>
+                            </div>
+                            <!-- Coupon Discount -->
+                            <div class="form-group">
+                                <label for="editCouponDiscount" class="form-label">Discount</label>
+                                <input type="number" class="form-control" id="editCouponDiscount" name="discount" value="<%= coupon.discount %>">
+                            </div>
+                            <!-- Minimum Purchase -->
+                            <div class="form-group">
+                                <label for="editCouponMinPurchase" class="form-label">Minimum Purchase</label>
+                                <input type="number" class="form-control" id="editCouponMinPurchase" name="min" value="<%= coupon.min %>">
+                            </div>
+                            <!-- Expiry Date -->
+                            <div class="form-group">
+                                <label for="editCouponExpiry" class="form-label">Expiry Date</label>
+                                <input type="date" class="form-control" id="editCouponExpiry" name="expiry" value="<%= coupon.expiry.toISOString().slice(0, 10) %>">
+                            </div>
+                            <button type="submit" class="btn btn-success" name="submit">Update Coupon</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <% }); %>
+      
+
+
+           <div class="container-xxl position-relative bg-white d-flex p-0">
+               
+            <div class="table-responsive" style="margin-left: 17em; margin-right: 3em;">
+                <!-- Table for Available Coupons -->
+                <h2>Available Coupons</h2>
+                <table class="table table-striped table-hover mt-3"> 
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Discount</th>
+                            <th>Min-Purchase</th>
+                            <th>Expiry</th>
+                            <th>List/Unlist</th>
+                            <th>Edit Coupon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% coupons.forEach((coupon, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= coupon.code %></td>
+                                <td><%= coupon.type %></td>
+                                <td><%= coupon.discount %></td>
+                                <td><%= coupon.min %></td>
+                                <td><%= coupon.expiry.toISOString().slice(0, 10) %></td>
+                                <td>
+                                    <% if (coupon.isDeleted) { %>
+                                        <button class="btn btn-success"onclick="couponlistunlist('<%= coupon._id %>', true)">List</button>
+                                    <% } else { %>
+                                        <button class="btn btn-danger" onclick="couponlistunlist('<%= coupon._id %>', false)">Unlist</button>
+                                    <% } %>
+                                </td>
+                                <td> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCouponModal<%= coupon._id %>">Edit</button></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+                
+            </div>
+            </div>
+    
+
+
+        <script>
+
+
+    // Function to show the confirmation modal
+    function showConfirmationModal(message, confirmCallback) {
+    const modal = document.getElementById('confirmationModal');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    const confirmActionBtn = document.getElementById('confirmActionBtn');
+    const cancelActionBtn = document.getElementById('cancelActionBtn');
+
+    confirmationMessage.textContent = message;
+
+    // Add event listeners to confirm and cancel buttons
+    confirmActionBtn.addEventListener('click', function () {
+        confirmCallback(); // Call the callback function to perform the action
+        closeModal(modal);
+    });
+
+    cancelActionBtn.addEventListener('click', function () {
+        closeModal(modal);
+    });
+
+    modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal(modal) {
+    modal.style.display = 'none';
+}
+
+
+       function couponlistunlist(_id,isDeleted){
+          const actionText = isDeleted? 'list' :'unlist'
+          const message = `Are you sure you want to ${actionText} this coupon?`;
+
+    // Show confirmation modal with appropriate message and callback function
+    showConfirmationModal(message, function () {
+        $.ajax({
+            url: "/admin/coupons/couponstatus",
+            type: "PATCH",
+            data: { _id,isDeleted },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (error) {
+                // Handle errors
+                console.log(error.message);
+            }
+         });
+      });
+ }
+        </script>
+         
+          
+     
+
+    
+
+
+
+
+
+
+
+    
+
+
+
+<%- include('../layouts/adminfooter') %>

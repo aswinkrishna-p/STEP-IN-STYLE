@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>STEP IN STYLE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+
+    <link rel="stylesheet" href="/css/aos.css">
+
+    <link rel="stylesheet" href="/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="/css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/icomoon.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+	<!-- <link rel="stylesheet" href="sweetalert2.min.css"> -->
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+
+	
+    
+  </head>
+  <style>small{color:red;}</style>
+  <body class="goto-here">
+		<div class="py-1 bg-black">
+    	<div class="container">
+    		<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+	    		<div class="col-lg-12 d-block">
+		    		<div class="row d-flex">
+		    			<div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+						    <a class="text" href="/signup"> HELP |SIGNUP</a>
+					    </div>
+					    <div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+						    <span class="text">stepinstyle68@gmail.com</span>
+					    </div>
+					    <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+						    <span class="text">3-5 Business days delivery &amp; Free Returns</span>
+					    </div>
+					  
+				    </div>
+			    </div>
+		    </div>
+		  </div>
+    </div>
+
+
+<div class="container invoice" id="invoice">
+    <div class="order-id">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h2>Invoice</h2>
+                <h3 class="pull-right">Order <%= orders._id %></h3>
+            </div>
+            <hr>
+            <div class="bills" style="display: flex;justify-content: space-between;"> 
+                <div class="col-xs-6">
+                    <address>
+                        <strong>Billed To:</strong><br>
+                        <%= user.name %><br>
+                        <%= orders.address[0].house %><br>
+                        <%= orders.address[0].city %>, <%= orders.address[0].district %>, <%= orders.address[0].state %>,<br>
+                        <%= orders.address[0].post %>, <%= orders.address[0].contact %>
+                    </address>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <address>
+                        <strong>Shipped To:</strong><br>
+                        <%= orders.address[0].name %><br>
+                        <%= orders.address[0].house %><br>
+                        <%= orders.address[0].city %><br>
+                        <%= orders.address[0].district %>, <%= orders.address[0].state %>,<br>
+                        <%= orders.address[0].post %>, <%= orders.address[0].contact %>
+                    </address>
+                </div>
+            </div>
+            <div class="payment" style="display: flex; justify-content: space-between;">
+                <div class="col-xs-6">
+                    <address>
+                        <strong>Payment Method:</strong><br>
+                        <%= orders.paymentMode %><br>
+                        <%= user.email %>
+                    </address>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <address>
+                        <strong>Order Date:</strong><br>
+                        <%= orders.orderDate.toISOString().slice(0, 10) %><br><br>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Order summary</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <td><strong>Item</strong></td>
+                                    <td class="text-center"><strong>Price</strong></td>
+                                    <td class="text-center"><strong>Quantity</strong></td>
+                                    <td class="text-right"><strong>Totals</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% let totalAmount = 0; %>
+                                <% orders.products.forEach((product) => { %>
+                                    <tr>
+                                        <td>
+                                            <%= product.name %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= product.price %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= product.quantity %>
+                                        </td>
+                                        <td class="text-right">
+                                            <%= product.price * product.quantity %>
+                                        </td>
+                                    </tr>
+                                    <% totalAmount += product.price * product.quantity; %>
+                                <% }); %>
+                                <tr>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line text-center">
+                                        <strong>Subtotal</strong>
+                                    </td>
+                                    <td class="thick-line text-right">₹<%= totalAmount %></td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-center">
+                                        <strong>Shipping</strong>
+                                    </td>
+                                    <td class="no-line text-right">₹<%= orders.shipping || 0 %></td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-center">
+                                        <strong>Discount</strong>
+                                    </td>
+                                    <td class="no-line text-right">₹<%= orders.discount || 0 %></td>
+                                </tr>
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-center">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td class="no-line text-right">₹<%= orders.total %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<a class="btn btn-primary" style="position: absolute;top:50px; right:50px;" onclick="printDiv()">print</a>
+
+
+<style>
+    .invoice-title h2,
+    .invoice-title h3 {
+        display: inline-block;
+    }
+
+    .table>tbody>tr>.no-line {
+        border-top: none;
+    }
+
+    .table>thead>tr>.no-line {
+        border-bottom: none;
+    }
+
+    .table>tbody>tr>.thick-line {
+        border-top: 10px solid;
+    }
+</style>
+
+
+<script>
+    function printDiv() {
+               // Assuming you have a div with id="content" that you want to print
+               var content = document.getElementById('invoice').innerHTML;
+               var originalContent = document.body.innerHTML;
+               document.body.innerHTML = content;
+               window.print();
+               document.body.innerHTML = originalContent;
+           }
+   
+   
+   
+   
+   
+       </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
