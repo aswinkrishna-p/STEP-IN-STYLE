@@ -49,90 +49,200 @@
     <!-- Spinner End -->
 
     <div class="container-fluid" style="margin-left: 12em;">
-      <div class="mt-4 p-4 border rounded mx-auto" style="margin-left: 10em;">
-          <h1 class="mb-4">Add Product</h1>
-          <!-- Form for adding a new product -->
-          <form action="/admin/productlist" method="POST" enctype="multipart/form-data" id="productForm">
-              <!-- Product Photo -->
-              <div class="form-group">
-                  <label for="productPhoto" class="form-label">Product Photo (JPG, JPEG, or PNG only)</label>
-                  <input type="file" class="form-control" id="productPhoto" name="photo" accept=".jpg, .jpeg, .png .webp" multiple required>
-                  <div id="imageError" style="color: red;"></div>
-              </div>
-              <!-- Product Name -->
-              <div class="form-group">
-                  <label for="productName" class="form-label">Product Name</label>
-                  <input type="text" class="form-control" id="productName" placeholder="Enter product name" required name="productName">
-              </div>
-              <!-- Product Price -->
-              <div class="form-group">
-                  <label for="productPrice" class="form-label">Product Price</label>
-                  <input type="number" class="form-control" id="productPrice" placeholder="Enter product price" required name="price">
-              </div>
-              <!-- Product Category -->
-              <div class="form-group">
-                  <label for="productCategory" class="form-label">Product Category</label>
-                  <select class="form-select" id="productCategory" required name="category">
-                      <option value="">Select a category</option>
-                      <% categories.forEach(cat =>{%>
-                      <option value="<%= cat%>"><%= cat %></option>
-                      <% }) %>
-                  </select>
-              </div>
-              <!-- Gender -->
-              <div class="form-group">
-                  <label for="productgender" class="form-label"> Gender</label>
-                  <select class="form-select" id="gender" required name="gender">
-                      <option value="">Select a gender</option>
-                      <% genders.forEach(gender =>{%>
-                      <option value="<%= gender %>"><%= gender %></option>
-                      <% }) %>
-                  </select>
-              </div>
-              <!-- Product Quantity -->
-              <div class="form-group">
-                  <label for="productQuantity" class="form-label">Product Stock</label>
-                  <input type="number" class="form-control" min="1" max="500"  id="productQuantity" placeholder="Enter product stock" required name="stock">
-              </div>
+        <div class="mt-4 p-4 border rounded mx-auto" style="margin-left: 10em;">
+            <h1 class="mb-4">Add Product</h1>
+            <!-- Form for adding a new product -->
+            <form action="/admin/productlist" method="POST" enctype="multipart/form-data" id="productForm">
+                <!-- Product Photo -->
+                <div class="form-group">
+                    <label for="productPhoto" class="form-label">Product Photo (JPG, JPEG, or PNG only)</label>
+                    <input type="file" class="form-control" id="productPhoto" name="photo" accept=".jpg, .jpeg, .png, .webp" multiple required>
+                    <div id="imageError" style="color: red;"></div>
+                    <!-- Image Preview -->
+                    <div id="imagePreview" class="mt-2" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    </div>
+                </div>                
+                <!-- Product Name -->
+                <div class="form-group">
+                    <label for="productName" class="form-label">Product Name</label>
+                    <input type="text" class="form-control" id="productName" placeholder="Enter product name" required name="productName">
+                    <p id="productNameError" class="error-message" style="color: red;"></p>
+                </div>
+                <!-- Product Price -->
+                <div class="form-group">
+                    <label for= "productPrice" class="form-label">Product Price</label>
+                    <input type="number" class="form-control" id="productPrice" placeholder="Enter product price" required name="price">
+                    <p id="productPriceError" class="error-message" style="color: red;"></p>
+                </div>
+                <!-- Product Category -->
+                <div class="form-group">
+                    <label for="productCategory" class="form-label">Product Category</label>
+                    <select class="form-select" id="productCategory" required name="category">
+                        <option value="">Select a category</option>
+                        <% categories.forEach(cat => { %>
+                        <option value="<%= cat%>"><%= cat %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <!-- Gender -->
+                <div class="form-group">
+                    <label for="productgender" class="form-label"> Gender</label>
+                    <select class="form-select" id="gender" required name="gender">
+                        <option value="">Select a gender</option>
+                        <% genders.forEach(gender => { %>
+                        <option value="<%= gender %>"><%= gender %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <!-- Product Quantity -->
+                <div class="form-group">
+                    <label for="productQuantity" class="form-label">Product Stock</label>
+                    <input type="number" class="form-control"  id="productQuantity" placeholder="Enter product stock" required name="stock">
+                    <p id="productStockError" class="error-message" style="color: red;"></p>
+                </div>
                 <!-- Product Offer -->
-              <div class="form-group">
-                  <label for="productOffer" class="form-label">Product Offer (Discount in %)</label>
-                  <input type="number" class="form-control" id="productOffer" placeholder="Enter product offer" required name="offer">
-              </div>
-              
-              <!-- Product Expiry Date -->
-              <div class="form-group">
-                  <label for="productExpiryDate" class="form-label">Product Expiry Date</label>
-                  <input type="date" class="form-control" id="productExpiryDate" required name="expiryDate">
-              </div>
-              
-              <!-- Product Description -->
-              <div class="form-group">
-                  <label for="productDescription" class="form-label">Product Description</label>
-                  <textarea class="form-control" id="productDescription" rows="4" placeholder="Enter product description" required name="description"></textarea>
-              </div>
-              <button type="submit" class="btn btn-success mt-4" name="submit">Add Product</button>
-          </form>
-      </div>
-  </div>
+                <div class="form-group">
+                    <label for="productOffer" class="form-label">Product Offer (Discount in %)</label>
+                    <input type="number" class="form-control" id="productOffer" placeholder="Enter product offer"  name="offer">
+                    <p id="productOfferError" class="error-message" style="color: red;"></p>
+                </div>
+                <!-- Product Expiry Date -->
+                <div class="form-group">
+                    <label for="productExpiryDate" class="form-label">Product Expiry Date</label>
+                    <input type="date" class="form-control" id="productExpiryDate"  name="expiryDate">
+                </div>
+                <!-- Product Description -->
+                <div class="form-group">
+                    <label for="productDescription" class="form-label">Product Description</label>
+                    <textarea class="form-control" id="productDescription" rows="4" placeholder="Enter product description" required name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success mt-4" name="submit">Add Product</button>
+            </form>
+        </div>
+    </div>
   
-  <script>
-      const productForm = document.getElementById('productForm');
-      const productPhoto = document.getElementById('productPhoto');
-      const imageError = document.getElementById('imageError');
-  
-      productForm.addEventListener('submit', function (e) {
-          const selectedFile = productPhoto.files[0];
-          const allowedExtensions = /\.(jpg|jpeg|png|webp)$/i;
-  
-          if (!allowedExtensions.test(selectedFile.name)) {
-              e.preventDefault(); // Prevent form submission
-              imageError.textContent = 'Please select a JPG, JPEG, PNG image or WEBP image ';
-          } else {
-              imageError.textContent = ''; // Clear error message
-          }
-      });
-  </script>
+    <script>
+        const productForm = document.getElementById('productForm');
+        const productPhoto = document.getElementById('productPhoto');
+        const imageError = document.getElementById('imageError');
+        const productName = document.getElementById('productName');
+        const productPrice = document.getElementById('productPrice');
+        const productStock = document.getElementById('productQuantity');
+        const productOffer = document.getElementById('productOffer');
+    
+        productForm.addEventListener('submit', function (e) {
+            // Reset any existing error messages
+            imageError.textContent = '';
+            productNameError.textContent = '';
+            productPriceError.textContent = '';
+            productStockError.textContent = '';
+            productOfferError.textContent = '';
+    
+            const selectedFile = productPhoto.files[0];
+            const allowedExtensions = /\.(jpg|jpeg|png|webp)$/i;
+
+            if (!allowedExtensions.test(selectedFile.name)) {
+                e.preventDefault(); // Prevent form submission
+                imageError.textContent = 'Please select a JPG, JPEG, PNG image, or WEBP image';
+            }
+    
+            if (!productName.value.trim()) {
+                e.preventDefault();
+                productNameError.textContent = "Product name field can't be empty";
+            }
+    
+            if (parseFloat(productPrice.value) < 0) {
+                e.preventDefault();
+                productPriceError.textContent = "Price can't be negative";
+            }
+    
+            if (parseInt(productStock.value) < 0) {
+                e.preventDefault();
+                productStockError.textContent = "Stock can't be negative";
+            }
+    
+            if (parseInt(productOffer.value) < 0) {
+                e.preventDefault();
+                productOfferError.textContent = "Offer can't be negative";
+            }
+        });
+    </script>
+
+
+
+<script>
+  // Function to display image previews
+function displayImagePreviews(input) {
+    const imagePreview = document.getElementById("imagePreview");
+
+    for (let i = 0; i < input.files.length; i++) {
+        const file = input.files[i];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const preview = document.createElement("div");
+            preview.className = "image-preview";
+            preview.innerHTML = `
+                <img src="${e.target.result}" alt="Preview" width="100">
+                <button type="button" onclick="deleteImage(this)" data-index="${i}">Delete</button>
+            `;
+            imagePreview.appendChild(preview);
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
+// Updated function to delete selected image
+function deleteImage(button) {
+    const index = button.getAttribute("data-index");
+    const input = document.getElementById("productPhoto");
+
+    // Create a new FileList without the deleted file
+    const newFileList = new DataTransfer();
+    Array.from(input.files).forEach((file, i) => {
+        if (i != index) {
+            newFileList.items.add(file);
+        }
+    });
+
+    // Set the new FileList to the input
+    input.files = newFileList.files;
+
+    // Clear and refresh image previews
+    const imagePreview = document.getElementById("imagePreview");
+    imagePreview.innerHTML = ""; // Clear existing previews
+    displayImagePreviews(input);
+}
+
+
+// Add an event listener to update image previews when the user selects files
+const productPhotoInput = document.getElementById("productPhoto");
+productPhotoInput.addEventListener("change", function () {
+    displayImagePreviews(this);
+});
+
+</script>
+
+
+<script>
+
+    // Add an event listener to the "Product Offer" input field
+const productOfferInput = document.getElementById("productOffer");
+const productExpiryDateInput = document.getElementById("productExpiryDate");
+
+productOfferInput.addEventListener("input", function () {
+    if (this.value.trim() !== "" && 0) {
+        // If there is an offer, set "Product Expiry Date" as required
+        productExpiryDateInput.setAttribute("required", "");
+    } else {
+        // If there is no offer, remove the "required" attribute
+        productExpiryDateInput.removeAttribute("required");
+    }
+});
+
+</script>
+
   
       
 

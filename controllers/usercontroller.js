@@ -71,6 +71,10 @@ const verifyEmail = async (req, res) => {
   try {
     let { email, otp } = req.body;
 
+    const currentDate = new Date();
+    const date =  currentDate.toDateString();
+
+
     if (!email || !otp) {
       return res.redirect(
         "/verification?error=Empty otp details are not allowed"
@@ -131,9 +135,12 @@ const verifyEmail = async (req, res) => {
         console.log("inside jjddddddddd", jjd);
 
         // You may also want to add a record of this transaction in the referrer's wallet
-        referrer.wallet.transactions.push(
-          `Received ${referralAmount} as a referral bonus.`
-        );
+        referrer.wallet.transactions.push({
+          id:referrer._id,
+            date: date, // Replace this with the actual date value
+            amount: referralAmount, // Replace this with the actual amount value
+            status: 'true', // Replace this with the actual status value
+      });
 
         // Save the updated referrer document
         await referrer.save();
@@ -784,6 +791,7 @@ const getsingleproduct = async (req, res) => {
 
     const user = await usermodel.findOne({ email: email });
     const product = await Product.findOne({ _id: id });
+    console.log(product);
     const currentDate = new Date();
 
     if (product.offer && product.expiryDate) {
@@ -832,8 +840,10 @@ const getcheckout = async (req, res) => {
         model: "product",
       })
       .exec();
+      // console.log(user,'cart dedeeeeeeeeee');
 
     const coupons = await Coupon.find({ isDeleted: false });
+
 
     if (!user) {
       return res.status(404).send("User not found");
@@ -885,7 +895,51 @@ const postcheckout = async (req, res) => {
         model: "product",
       })
       .exec();
+     
+          // Parse each element of the array as JSON
+    let currentuser = req.body.cartvalue.map((str) => {
+      try {
+        return JSON.parse(str);
+      } catch (error) {
+        console.error('Error parsing cartvalue element:', error);
+        return null; // Handle the error or invalid JSON
+      }
+    });
+    
+
+
+    
+    
+    console.log("here 1")
+    
+    console.log("the current user",currentuser[0][0])
+    
+    // Check if parsing errors occurred and handle them
+    if (currentuser.some((item) => item === null)) {
+      return res.status(400).json({ error: 'Invalid cartvalue element(s)' });
+    }
+      
+      console.log("access",currentuser[0][0].quantity);
+      
+      if (currentuser[0].length != user.cart.length) {
+        console.log("inside the if")
+        return res.json({ change: true });
+      }
+      
+      for (let i = 0; i < user.cart.length; i++) {
+        console.log("inside the loop")
+        if (currentuser[0][i].quantity != user.cart[i].quantity) {
+          console.log("inside the lopp if")
+          return res.json({ change: true });
+        }
+      }
+
+
+
+
     const userdata = user._id;
+    const currentDate = new Date();
+    const date =  currentDate.toDateString();
     const formData = {
       firstname: req.body.firstName,
       lastname: req.body.LastName,
@@ -982,7 +1036,15 @@ const postcheckout = async (req, res) => {
       if (carttotal <= walletbalance) {
         walletbalance = walletbalance - parseInt(carttotal);
         console.log('After deduction: walletbalance', walletbalance);
+
+        const newTransaction ={
+          date:date,
+          amount: -parseInt(carttotal), 
+          status:'false',
+        }
+        user.wallet.transactions.push(newTransaction)
       }
+
 
       user.wallet.balance = walletbalance;
        await user.save();
@@ -1057,6 +1119,11 @@ const postcheckout = async (req, res) => {
         },
         { new: true }
       );
+
+      if(couponcode){
+        user.usedCoupons.push(couponcode._id);
+      await user.save();
+      }
 
       res.json({ codSuccess: true, message: "Order placed successfully!" });
     } else if (paymentmethod == "online") {
@@ -1221,6 +1288,39 @@ const getprofile = async (req, res) => {
     console.log(error);
   }
 };
+
+// edit profile
+
+const updateProfile = async (req, res) => {
+  try {
+    const email = req.session.user;
+    const user = await usermodel.findOne({ email: email });
+    const userId = user._id;
+    const { editFirstName, editLastName, editPhoneNumber } = req.body;
+
+    console.log('bodyyyyy', req.body);
+    console.log('userid', userId);
+
+    // Update the user's profile in your database using promises
+    const updatedUser = await usermodel.findByIdAndUpdate(
+      userId,
+      { first_name: editFirstName, last_name: editLastName, phone: editPhoneNumber }
+    );
+
+    if (!updatedUser) {
+      // Handle the case where the user was not found or the update failed
+      return res.status(500).json({ error: 'Failed to update profile' });
+    }
+
+    // Profile updated successfully
+    return res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error(error);
+    // Handle other errors, e.g., send an error response
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 const add_Address = async (req, res) => {
   try {
@@ -1401,13 +1501,26 @@ const getorderspage = async (req, res) => {
       const email = req.session.user;
       const user = await usermodel.findOne({ email: email });
 
-      // Find orders associated with the logged-in user
+      // Pagination parameters
+      const perPage = 6; // Number of orders to display per page
+      const page = parseInt(req.query.page) || 1; // Get the page number from the query parameter or default to 1
+
+      // Find orders associated with the logged-in user with pagination
       const orders = await Order.find({ customer: user._id })
         .populate("products.product")
-        .sort({ orderDate: -1 });
-      // console.log(orders);
+        .sort({ orderDate: -1 })
+        .skip((page - 1) * perPage)
+        .limit(perPage);
 
-      res.render("users/order", { user: user || false, orders: orders || [] });
+      // Count the total number of orders for pagination
+      const totalCount = await Order.countDocuments({ customer: user._id });
+
+      res.render("users/order", {
+        user: user || false,
+        orders: orders || [],
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / perPage), // Calculate the total number of pages
+      });
     } else {
       // Handle the case when the user is not logged in
       res.render("users/order", { user: false, orders: [] });
@@ -1418,6 +1531,7 @@ const getorderspage = async (req, res) => {
     res.render("error", { message: "Error fetching orders." });
   }
 };
+
 
 const singleOrderDetails = async (req, res) => {
   try {
@@ -1449,6 +1563,9 @@ const cancelOrder = async (req, res) => {
     const userId = user._id;
     const refundmethod = req.body.refund;
 
+    const currentDate = new Date();
+    const date =  currentDate.toDateString();
+
     const cancelledOrder = await Order.findById(orderId);
     if (!cancelledOrder) {
       return res.status(404).json({ error: "Order not found" });
@@ -1469,16 +1586,34 @@ const cancelOrder = async (req, res) => {
     console.log("cal", cancelledOrder.paymentMode);
 
     if (refundmethod) {
-      if (cancelledOrder.paymentMode === "online" && refundmethod === "bank") {
-        const updatedOrder = await Order.findByIdAndUpdate(
-          orderId,
-          { orderStatus: "cancelled" },
-          { new: true }
-        );
-      } else if (
-        cancelledOrder.paymentMode === "online" &&
-        refundmethod === "wallet"
-      ) {
+      if (cancelledOrder.paymentMode === "online" ) {
+        if(refundmethod === "bank"){
+          const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { orderStatus: "cancelled" },
+            { new: true }
+          );
+        } else if (refundmethod === "wallet"){
+          const updatedOrder = await Order.findByIdAndUpdate(
+            orderId,
+            { orderStatus: "cancelled" },
+            { new: true }
+          );
+  
+          await usermodel.findByIdAndUpdate(userId, {
+            $inc: { "wallet.balance": totalAmount },
+            $push: { "wallet.transactions":{
+              id:updatedOrder._id,
+              date: date, // Replace this with the actual date value
+              amount: totalAmount, // Replace this with the actual amount value
+              status: 'true', // Replace this with the actual status value
+            } 
+           },
+
+          });
+        }
+       
+      } else if (cancelledOrder.paymentMode === "wallet" ) {
         const updatedOrder = await Order.findByIdAndUpdate(
           orderId,
           { orderStatus: "cancelled" },
@@ -1487,13 +1622,20 @@ const cancelOrder = async (req, res) => {
 
         console.log(totalAmount, "assasasasassssssssssssssssssssssssssssss");
 
-        console.log(userId);
+       
         await usermodel.findByIdAndUpdate(userId, {
           $inc: { "wallet.balance": totalAmount },
-          $push: { "wallet.transactions": updatedOrder._id.toString() },
+          $push: { "wallet.transactions":{
+            id:updatedOrder._id,
+            date: date, // Replace this with the actual date value
+            amount: totalAmount, // Replace this with the actual amount value
+            status: 'true', // Replace this with the actual status value
+          } 
+         },
         });
       }
-    }
+     }
+    
 
     if (cancelledOrder.paymentMode === "cod") {
       const updatedOrder = await Order.findByIdAndUpdate(
@@ -1625,6 +1767,7 @@ module.exports = {
   apply_coupon,
 
   getprofile,
+  updateProfile,
   add_Address,
   getAddressBook,
   setDefaultAddress,

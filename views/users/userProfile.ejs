@@ -52,7 +52,9 @@
         
 
         <!-- Main Content -->
-        <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px; padding-left: 20px; margin-bottom: 2em;">
+
+       
+        <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px; padding-left: 20px; margin-bottom: 2em;" id="userProfileSection">
             
             <%if(user ){%>
                 <div class="row m-right rounded d-flex justify-content-between align-items-center ">
@@ -67,7 +69,8 @@
                               <%}%>
                                 </h1>
                                 <p class="card-text">Available Balance</p>
-                                <!-- <a href="#" class="btn btn-primary">View Transactions</a> -->
+                                <a href="#" class="btn btn-primary" id="viewTransactionsBtn">View Transactions</a>
+                                
                             </div>
                         </div>
                     </div>
@@ -96,10 +99,10 @@
                     </div>
             
                     <!-- Password -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" class="form-control" placeholder="******" id="password" name="password" required readonly>
-                    </div>
+                    </div> -->
             
                     <!-- Phone Number -->
                     <div class="form-group">
@@ -108,15 +111,218 @@
                     </div>
                 </div>
                 <!-- Edit and Update Buttons -->
-                <button type="button" id="editProfileBtn" class="btn btn-primary">Edit Profile</button>
+                <button type="button" id="editProfileBtn" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                 <button type="button" id="updateProfileBtn" class="btn btn-success" style="display: none;">Update Profile</button>
             </form>
             
+            <!-- edit profile modal -->
+            
+            <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="editProfileForm">
+                        <div class="form-group">
+                          <label for="editFirstName">First Name</label>
+                          <input type="text" class="form-control" id="editFirstName" name="editFirstName" value="<%= user.first_name || '' %>" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="editLastName">Last Name</label>
+                          <input type="text" class="form-control" id="editLastName" name="editLastName" value="<%= user.last_name || '' %>" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="editPhoneNumber">Phone Number</label>
+                          <input type="tel" class="form-control" id="editPhoneNumber" name="editPhoneNumber" value="<%= user.phone || '' %>" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Update</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
         </div>
-       
+
+
+          <!-- Wallet Section -->
+     <% if (user && user.wallet.transactions && user.wallet.transactions.length > 0){%>
+    <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px; padding-left: 20px; margin-bottom: 2em; display: none;" id="walletHistorySection" >
+    <section class="wallet-section mt-5">
+        <div class="container">
+            
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            Wallet balance
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Amount</label>
+                                    <div class="form-control" id="amount">
+                                        <p>₹ <%if(user.wallet.balance > 0){%>
+                                          <%=user.wallet.balance%>
+                                    <%  }else {%> 0.00
+                                    <%}%></p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <h4>Wallet History</h4>
+                        <hr>
+                      
+                            <table class="tb table-bordered" style="width: 100%;">
+                                 
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   
+                                  <% user.wallet.transactions.forEach(transaction => { %>
+                                        <tr>
+                                            <td><%= transaction.date.toDateString() %></td>
+                                            <td><%= transaction.amount %></td>
+                                            <td><%= transaction.status ? 'CREDIT' : 'DEBIT' %></td>
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                            
+                        
+                    </div>
+                </div>
+            
+        </div>
+    </section>
+  </div>
+  <%} else {%>
+
+    <div class="no-orders-message" style="text-align: center;">
+      <h3>No transactions</h3>
+  </div>
+<% } %>
+
     </div>
   
 </div>
+
+
+
+
+
+
+
+
+
+<script>
+// JavaScript code for toggling sections
+const viewTransactionsBtn = document.getElementById("viewTransactionsBtn");
+const backToProfileBtn = document.getElementById("backToProfileBtn");
+const userProfileSection = document.getElementById("userProfileSection");
+const walletHistorySection = document.getElementById("walletHistorySection");
+
+viewTransactionsBtn.addEventListener("click", function() {
+  // Hide user profile and show wallet history
+  userProfileSection.style.display = "none";
+  walletHistorySection.style.display = "block";
+  backToProfileBtn.style.display = "block";
+  viewTransactionsBtn.style.display = "none";
+});
+
+backToProfileBtn.addEventListener("click", function() {
+  // Hide wallet history and show user profile
+  walletHistorySection.style.display = "none";
+  userProfileSection.style.display = "block";
+  viewTransactionsBtn.style.display = "block";
+  backToProfileBtn.style.display = "none";
+});
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('#editProfileForm').on('submit', function (e) {
+      e.preventDefault();
+
+      // Add your form validation logic here
+      if (!validateForm()) {
+        // If validation fails, do not proceed with the AJAX request
+        return;
+      }
+
+      // Proceed with the AJAX request if validation passes
+      $.ajax({
+        type: 'POST',
+        url: '/updateProfile', // Route to update the profile
+        data: $('#editProfileForm').serialize(),
+        success: function (data) {
+          // Handle success, e.g., close the modal and display a success message
+          $('#editProfileModal').modal('hide');
+          // alert(data.message);
+        },
+        error: function (error) {
+          // Handle the error, e.g., display an error message
+          alert('Failed to update profile');
+        },
+      });
+    });
+
+    // Function to validate the entire form
+    function validateForm() {
+  const firstNameInput = $('#editFirstName');
+  const lastNameInput = $('#editLastName');
+  const phoneNumberInput = $('#editPhoneNumber');
+
+  const firstName = firstNameInput.val().trim();
+  const lastName = lastNameInput.val().trim();
+  const phoneNumber = phoneNumberInput.val().trim();
+
+  // Clear previous error messages
+  $('.error-message').remove();
+
+  // Validate first name
+  if (firstName === '') {
+    displayErrorMessage(firstNameInput, 'First Name is required.');
+    return false;
+  }
+
+  // Validate last name
+  if (lastName === '') {
+    displayErrorMessage(lastNameInput, 'Last Name is required.');
+    return false;
+  }
+
+  // Validate phone number
+  if (!phoneRegex.test(phoneNumber)) {
+    displayErrorMessage(phoneNumberInput, 'Invalid phone number. Please enter a valid phone number.');
+    return false;
+  }
+
+  // All validations passed
+  return true;
+}
+
+// Function to display error message next to the input field
+function displayErrorMessage(inputElement, message) {
+  const errorMessageElement = $('<div class="error-message text-danger"></div>').text(message);
+  inputElement.after(errorMessageElement);
+}
+
+  });
+</script>
 
 
 

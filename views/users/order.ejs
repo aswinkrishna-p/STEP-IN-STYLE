@@ -36,7 +36,7 @@
         </div>
 
         <!-- Main Content (Order Section) -->
-        <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px;">
+        <div class="col-md-8" style="border: solid 1px; padding-bottom: 20px; margin-bottom: 20px;">
             <!-- Order Section -->
             <section>
                 <div class="container">
@@ -99,6 +99,26 @@
                     </div>
                 </div>
             </section>
+
+            <div class="block-27" style="display: flex; justify-content: center;">
+                <ul>
+                  <% if (totalPages > 1) { %>
+                    <% if (currentPage > 1) { %>
+                      <li><a href="?page=<%= currentPage - 1 %>">&lt;</a></li>
+                    <% } %>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                      <li class="<%= i === currentPage ? 'active' : '' %>">
+                        <a href="?page=<%= i %>"><%= i %></a>
+                      </li>
+                    <% } %>
+                    <% if (currentPage < totalPages) { %>
+                      <li><a href="?page=<%= currentPage + 1 %>">&gt;</a></li>
+                    <% } %>
+                  <% } %>
+                </ul>
+              </div>
+
+
         </div>
         
         

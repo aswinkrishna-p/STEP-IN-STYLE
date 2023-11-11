@@ -144,17 +144,15 @@
                               </p> -->
                               <p class="d-flex">
                                   <span>Discount</span>
-                                  <span id="discount">₹  </span>
+                                  <span id="discount">  </span>
                               </p>  
                               <hr>
-                              <input
-                              type="hidden"
-                              id="totalamount"
-                              name=""
-                              value=<%= `${cartTotal}` %>
-                            /> 
+                              <% const cart =user.cart %>
+                              <!-- <%=cart%> -->
+                              <input type="hidden" class="cart" name="cartvalue" value='<%= JSON.stringify(cart) %>'>
+                              <input type="hidden" id="totalamount" name="" value=<%= `${cartTotal}` %> /> 
 
-                            <input type="hidden"id="amount" name="Total"value=<%= `${cartTotal}` %>> 
+                            <input type="hidden" id="amount" name="Total" value=<%= `${cartTotal}` %>> 
 
                             <input type="hidden" name="prev" id="prev" value=<%= `${cartTotal}` %>>
 
@@ -233,6 +231,8 @@
                             <div class="form-group">
                                 <label for="newFirstName">First Name</label>
                                 <input type="text" class="form-control" id="newFirstName" name="newFirstName" required>
+                                <!-- Add a span element for error message -->
+                                <span class="text-danger" id="firstNameError"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -240,46 +240,57 @@
                             <div class="form-group">
                                 <label for="newLastName">Last Name</label>
                                 <input type="text" class="form-control" id="newLastName" name="newLastName" required>
+                                <!-- Add a span element for error message -->
+                                <span class="text-danger" id="lastNameError"></span>
                             </div>
                         </div>
                     </div>
-     
+                    
                     <!-- Street Address -->
                     <div class="form-group">
                         <label for="newStreetAddress">Street Address</label>
-                        <input type="text" class="form-control" id="newStreetAddress" name="newStreetAddress" placeholder="House number and street name">
+                        <input type="text" class="form-control" id="newStreetAddress" name="newStreetAddress" placeholder="House number and street name" required>
+                        <!-- Add a span element for error message -->
+                        <span class="text-danger" id="streetAddressError"></span>
                     </div>
                     
                     <!-- State -->
                     <div class="row">
                         <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="newState">State</label>
-                        <input type="text" class="form-control" id="newState" name="newState" placeholder="State">
+                            <div class="form-group">
+                                <label for="newState">State</label>
+                                <input type="text" class="form-control" id="newState" name="newState" placeholder="State" required>
+                                <!-- Add a span element for error message -->
+                                <span class="text-danger" id="stateError"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="newTownCity">Town / City</label>
+                                <input type="text" class="form-control" id="newTownCity" name="newTownCity" placeholder="Town / City" required>
+                                <!-- Add a span element for error message -->
+                                <span class="text-danger" id="townCityError"></span>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                    <!-- Town/City -->
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="newTownCity">Town / City</label>
-                        <input type="text" class="form-control" id="newTownCity" name="newTownCity" placeholder="Town / City">
-                    </div>
-                    </div>
-                </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <!-- Postcode/ZIP -->
                             <div class="form-group">
-                                <label for="newPostcodeZip">Postcode / ZIP *</label>
+                                <label for = "newPostcodeZip">Postcode / ZIP *</label>
                                 <input type="text" class="form-control" id="newPostcodeZip" name="newPostcodeZip" placeholder="Postcode / ZIP" required>
+                                <!-- Add a span element for error message -->
+                                <span class="text-danger" id="postcodeZipError"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <!-- District -->
                             <div class="form-group">
                                 <label for="newDistrict">District</label>
-                                <input type="text" class="form-control" id="newDistrict" name="newDistrict" placeholder="District">
+                                <input type="text" class="form-control" id="newDistrict" name="newDistrict" placeholder="District" required>
+                                <!-- Add a span element for error message -->
+                                <span class="text-danger" id="districtError"></span>
                             </div>
                         </div>
                     </div>
@@ -287,13 +298,15 @@
                     <!-- Phone -->
                     <div class="form-group">
                         <label for="newPhone">Phone</label>
-                        <input type="text" class="form-control" id="newPhone" name="newPhone" placeholder="Phone">
+                        <input type="text" class="form-control" id="newPhone" name="newPhone" placeholder="Phone" required>
+                        <!-- Add a span element for error message -->
+                        <span class="text-danger" id="phoneError"></span>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveNewAddressBtn">Save Address</button>
+                <button type="button" class="btn btn-primary" id="saveNewAddressBtn" onclick="validateAndSaveAddress()">Save Address</button>
             </div>
         </div>
     </div>
@@ -322,8 +335,9 @@
       
 
 
-<script>
 
+
+<script>
     // Function to show the "Add New Address" modal
     function showAddNewAddressModal() {
         $('#addNewAddressModal').modal('show');
@@ -336,6 +350,68 @@
 
     // Add click event listener to the "Add a New Address" link
     document.getElementById('addNewAddressLink').addEventListener('click', showAddNewAddressModal);
+
+    // Function to validate the form before saving
+    function validateAndSaveAddress() {
+        const form = document.getElementById('newAddressForm');
+        const firstName = document.getElementById('newFirstName');
+        const lastName = document.getElementById('newLastName');
+        const streetAddress = document.getElementById('newStreetAddress');
+        const state = document.getElementById('newState');
+        const townCity = document.getElementById('newTownCity');
+        const postcodeZip = document.getElementById('newPostcodeZip');
+        const district = document.getElementById('newDistrict');
+        const phone = document.getElementById('newPhone');
+        
+        // Reset error messages
+        document.querySelectorAll('.text-danger').forEach(element => {
+            element.textContent = '';
+        });
+
+        // Trim all field values
+        firstName.value = firstName.value.trim();
+        lastName.value = lastName.value.trim();
+        streetAddress.value = streetAddress.value.trim();
+        state.value = state.value.trim();
+        townCity.value = townCity.value.trim();
+        postcodeZip.value = postcodeZip.value.trim();
+        district.value = district.value.trim();
+        phone.value = phone.value.trim();
+
+        if (form.checkValidity()) {
+            // If the form is valid, save the address
+            saveNewAddress();
+        } else {
+            // If the form is not valid, show validation feedback
+            form.classList.add('was-validated');
+
+            // Show specific error messages
+            if (!firstName.checkValidity()) {
+                document.getElementById('firstNameError').textContent = 'Please enter a valid first name.';
+            }
+            if (!lastName.checkValidity()) {
+                document.getElementById('lastNameError').textContent = 'Please enter a valid last name.';
+            }
+            if (!streetAddress.checkValidity()) {
+                document.getElementById('streetAddressError').textContent = 'Please enter a valid street address.';
+            }
+            if (!state.checkValidity()) {
+                document.getElementById('stateError').textContent = 'Please enter a valid state.';
+            }
+            if (!townCity.checkValidity()) {
+                document.getElementById('townCityError').textContent = 'Please enter a valid town or city.';
+            }
+            if (!postcodeZip.checkValidity()) {
+                document.getElementById('postcodeZipError').textContent = 'Please enter a valid postcode or ZIP.';
+            }
+            if (!district.checkValidity()) {
+                document.getElementById('districtError').textContent = 'Please enter a valid district.';
+            }
+            if (!phone.checkValidity()) {
+                document.getElementById('phoneError').textContent = 'Please enter a valid phone number.';
+            }
+        }
+    }
 
     // Function to handle form submission for adding a new address
     function saveNewAddress() {
@@ -377,11 +453,6 @@
             console.error('An error occurred:', error);
         });
     }
-
-    // Add click event listener to the "Save Address" button within the modal
-    document.getElementById('saveNewAddressBtn').addEventListener('click', saveNewAddress);
-
-
 </script>
 
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////////////// -->
@@ -446,7 +517,8 @@ function selectpayment(radio){
 
 // Function to place the order using AJAX
 function placeOrder() {
-  const formData = $('#checkoutform').serialize();
+    const cartvalue = document.querySelector('input[name="cartvalue"]').value
+    const formData = $('#checkoutform').serialize() + `&cartvalue=${JSON.stringify(cartvalue)}`;
   console.log('formdata', formData);
 
   // Send the data to the server using AJAX
@@ -458,6 +530,17 @@ function placeOrder() {
       console.log('success');
       console.log('codSuccess:', res.codSuccess);
       console.log('razorSuccess:', res.razorSuccess);
+      if(res.change){
+        Swal.fire({
+         title: 'change has been found',
+         text: "a change has been found in the cart,please refresh it ",
+         icon: 'error'
+       })
+         .then(() => {
+           window.location.reload()
+         })
+     
+      }
       if (res.codSuccess) {
         console.log('response', res);
         // If the order placement logic succeeds, show the order confirmation modal
@@ -533,5 +616,7 @@ placeOrderButton.addEventListener('click', function (event) {
 
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
 
   <%- include('../layouts/userfooter') %>

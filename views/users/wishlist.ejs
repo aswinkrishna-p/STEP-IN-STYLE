@@ -34,10 +34,14 @@
                     </a> </td>
                     <td><p><%= wishlist[i].productName %></p></td>
                 <input type="hidden" name="" id="price<%= wishlist[i]._id %>" value="<%= wishlist[i].price %>">
-                <td>$<%= wishlist[i].price %></td>
+                <td>₹<%= wishlist[i].price %></td>
                 <td id="remove-wishlist-<%= wishlist[i]._id %>">
-                    <button class="btn btn-primary" onclick="addtoCart('<%= wishlist[i]._id %>')">Add to Cart</button>
-                    <button class="btn btn-danger" onclick="removeFromWishlist('<%= wishlist[i]._id %>')">Remove</button>
+                  <% if(wishlist[i].stock > 0) { %>
+                    <button class="btn btn-primary" onclick="addToCartOrShowMessage('<%= wishlist[i]._id %>')">Add to Cart</button>
+                <% } else { %>
+                    <button class="btn btn-primary" style="pointer-events: none; opacity: 0.5;">Out of Stock</button>
+                <% } %>
+                <button class="btn btn-danger" onclick="removeFromWishlist('<%= wishlist[i]._id %>')">Remove</button>
                 </td>
             </tr>
             <% } %>

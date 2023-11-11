@@ -85,6 +85,8 @@ router.post('/verify-payment',usercontroller.verifyPayment)
 
 router.get('/userprofile',is_blocked,loggedin,usercontroller.getprofile)
 
+router.post('/updateProfile',is_blocked,loggedin,usercontroller.updateProfile)
+
 // address
 
 router.post('/add-address',loggedin,usercontroller.add_Address)

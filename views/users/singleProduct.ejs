@@ -86,7 +86,7 @@
                       <div class="row mt-4">
                           <div class="col-md-6">
                               <div class="form-group d-flex">
-                    <div class="select-wrap">
+                    <!-- <div class="select-wrap">
                     <div class="icon"><span class="ion-ios-arrow-down"></span></div>
                     <select name="" id="" class="form-control">
                         <option value="">Small</option>
@@ -94,7 +94,7 @@
                       <option value="">Large</option>
                       <option value="">Extra Large</option>
                     </select>
-                  </div>
+                  </div> -->
                   </div>
                           </div>
                           <div class="w-100"></div>
@@ -113,17 +113,28 @@
                 </div> -->
                 <div class="w-100"></div>
                 <div class="col-md-12">
-                    <p style="color: #000;">80 piece available</p>
+                   <% if(product.stock <1) {%>
+                    <p style="color: #ff0000;" class="stock" > out of stock</p>
+                    <% }else{ %>
+                        <p style="color: #000;" class="stock" > <%= product.stock %> piece available</p>
+
+                    <% } %>
                 </div>
             </div>
             <!-- <button onclick="addtoCart('<%= product._id %>')">heloo</button> -->
             <% if(user) { %>
-            <a onclick="addtoCart('<%= product._id %>')" class="btn btn-black text-white py-3 px-5 mr-2">Add to Cart</a>
+                <% if(product.stock>0){ %>
+                    <a onclick="addtoCart('<%= product._id %>')" class="btn btn-black text-white py-3 px-5 mr-2">Add to Cart</a>
+                    
+                    <% }else{ %>
+                        <button class="btn btn-black text-white py-3 px-5 mr-2" style="display: none;">Add to Cart</button>
+                        <% } %>
             <a onclick="addToWishlist('<%= product._id %>')" class="btn btn-black text-white py-3 px-5 mr-2">add to wishlist</a>
             <!-- <a href="cart.html" class="btn btn-primary py-3 px-5">Buy now</a> -->
             <% }else{%>
                 
-            <p><a href="/login" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a href="/login" class="btn btn-primary py-3 px-5">add to wishlist</a></p>
+            <a href="/login" class="btn btn-black text-white py-3 px-5 mr-2">Add to Cart</a>
+            <a href="/login" class="btn btn-black text-white py-3 px-5">add to wishlist</a>
                 
                 <%} %>
               </div>

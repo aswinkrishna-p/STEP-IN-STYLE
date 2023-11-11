@@ -52,24 +52,40 @@
         <div class="mt-4 p-4 border rounded mx-auto" style="margin-left: 10em;">
             <h1 class="mb-4">Edit Product</h1>
             <!-- Form for editing a product -->
-            <form action="/admin/productlist/<%= product._id %>" method="POST" enctype="multipart/form-data">
+            <form action="/admin/productlist/<%= product._id %>" method="POST" enctype="multipart/form-data" id="productForm">
                 <!-- Product Photo (Optionally allow users to change the photo) --> 
                 <div class="form-group">
-                    <label for="productPhoto" class="form-label">Product Photo</label>
-                    <input type="file" class="form-control" id="productPhoto" accept="image/*" name="photo" multiple ="/images/<%= product.photo  %>" >
-                    <% if (product.photo) { %>
-                        <img src="/images/<%= product.photo[0] %>" alt="Current Product Photo" width="100">
-                    <% } %>
+                    <label for="productPhoto" class="form-label">Product Photos</label>
+                    <input type="file" class="form-control" id="productPhoto" name="photo" accept=".jpg, .jpeg, .png, .webp" multiple>
+                    <div id="imageError" style="color: red;"></div>
+                   <!-- product images -->
+
+                   <% if (product.photo && product.photo.length > 0) { %>
+                    <div id="image-previews" class="mt-2" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <% for (let i = 0; i < product.photo.length; i++) { %>
+                            <div class="image-preview">
+                                <img src="/images/<%= product.photo[i] %>" alt="Product Photo" width="100">
+                                <input type="hidden" id="imgurl" name="imgurl" value="<%= product.photo[i] %>">
+                                <button type="button" class="delete-image" onclick="event.preventDefault(); removeImg('<%= product._id %>','<%= product.photo[i] %>')" data-index="<%= i %>">Delete</button>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %>
+
+
                 </div>
+                
                 <!-- Product Name (Pre-fill with current product name) -->
                 <div class="form-group">
                     <label for="productName" class="form-label">Product Name</label>
                     <input type="text" class="form-control" id="productName" placeholder="Enter product name" required name="productName" value="<%= product.productName %>">
+                    <p id="productNameError" class="error-message" style="color: red;"></p>
                 </div>
                 <!-- Product Price (Pre-fill with current product price) -->
                 <div class="form-group">
                     <label for="productPrice" class="form-label">Product Price</label>
                     <input type="number" class="form-control" id="productPrice" placeholder="Enter product price" required name="price" value="<%= product.price %>">
+                    <p id="productPriceError" class="error-message" style="color: red;"></p>
                 </div>
 
 
@@ -96,14 +112,16 @@
                 </select>
               </div>
 
-                <div class="form-group">
-                    <label for="productQuantity" class="form-label">Product Stock</label>
-                    <input type="number" class="form-control" min="1" max="500" value="<%= product.stock%>" id="productQuantity" placeholder="Enter product stock" required name="stock">
-                  </div>
+              <div class="form-group">
+                <label for="productQuantity" class="form-label">Product Stock</label>
+                <input type="number" class="form-control" value="<%= product.stock %>" id="productQuantity" placeholder="Enter product stock" required name="stock">
+                <p id="productQuantityError" class="error-message" style="color: red;"></p>
+            </div>
                    <!-- Offer -->
             <div class="form-group">
                 <label for="productOffer" class="form-label">Offer</label>
                 <input type="number" class="form-control" id="productOffer" placeholder="Enter product offer" name="offer" value="<%= product.offer %>">
+                <p id="productOfferError" class="error-message" style="color: red;"></p>
             </div>
             <div class="form-group">
                 <label for="productOffer" class="form-label">Product Orginal Price</label>
@@ -113,7 +131,7 @@
            
            <div class="form-group">
                <label for="productExpiryDate" class="form-label">Expiry Date</label>
-               <input type="date" class="form-control" id="productExpiryDate" required name="expiryDate" value="<%= product.expiryDate ? product.expiryDate.toISOString().split('T')[0] : '' %>">
+               <input type="date" class="form-control" id="productExpiryDate" name="expiryDate" value="<%= product.expiryDate ? product.expiryDate.toISOString().split('T')[0] : '' %>">
            </div>
 
                 <!-- Product Description (Pre-fill with current product description) -->
@@ -123,10 +141,106 @@
                 </div>
                 <button type="submit" class="btn btn-success mt-4" name="submit">Update Product</button>
             </form>
+
+            
         </div>
     </div>
     
-      
+    <script>
+     const productForm = document.getElementById('productForm');
+     const productPhoto = document.getElementById('productPhoto');
+    //  const imageError = document.getElementById('imageError');
+     const productName = document.getElementById('productName');
+     const productPrice = document.getElementById('productPrice');
+     const productQuantity = document.getElementById('productQuantity'); // Updated field id
+     const productOffer = document.getElementById('productOffer');
+
+    productForm.addEventListener('submit', function (e) {
+    // Reset any existing error messages
+    // imageError.textContent = '';
+    productNameError.textContent = '';
+    productPriceError.textContent = '';
+    productQuantityError.textContent = ''; // Updated field id
+    productOfferError.textContent = '';
+
+    // const selectedFile = productPhoto.files[0];
+    // const allowedExtensions = /\.(jpg|jpeg|png|webp)$/i;
+
+    // if (!allowedExtensions.test(selectedFile.name)) {
+    //     e.preventDefault(); // Prevent form submission
+    //     imageError.textContent = 'Please select a JPG, JPEG, PNG image, or WEBP image';
+    // }
+
+    if (!productName.value.trim()) {
+        e.preventDefault();
+        productNameError.textContent = "Product name field can't be empty";
+    }
+
+    if (parseFloat(productPrice.value) < 0) {
+        e.preventDefault();
+        productPriceError.textContent = "Price can't be negative";
+    }
+
+    if (parseInt(productQuantity.value) < 0) { // Updated field id
+        e.preventDefault();
+        productQuantityError.textContent = "Stock can't be negative"; // Updated field id
+    }
+
+    if (parseInt(productOffer.value) < 0) {
+        e.preventDefault();
+        productOfferError.textContent = "Offer can't be negative";
+    }
+});
+
+    </script>
+
+
+<script>
+
+
+    // Add an event listener to the "Offer" input field
+    const productOfferInput = document.getElementById("productOffer");
+    const productExpiryDateInput = document.getElementById("productExpiryDate");
+    
+    productOfferInput.addEventListener("input", function () {
+        if (this.value.trim() !== "" && 0) {
+            // If there is an offer, set "Expiry Date" as required
+            productExpiryDateInput.setAttribute("required", "");
+        } else {
+            // If there is no offer, remove the "required" attribute
+            productExpiryDateInput.removeAttribute("required");
+        }
+    });
+    
+ </script>
+
+ <script>
+    function removeImg(id, url) {
+    fetch(`/admin/removeImage/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ url })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+ </script>
+    
+
+
+
+
+
 
 <%- include('../layouts/adminfooter') %>
 

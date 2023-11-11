@@ -77,7 +77,7 @@
                                <% if(user) {%>
 
                                 <a href="#" onclick="addToWishlist('<%= product._id %>')"class="buy-now text-center py-2">add to wishlist<span><i class="ion-ios-add ml-1"></i></span></a> 
-                                <a href="#" onclick="addtoCart('<%= product._id %>')"class="buy-now text-center py-2">add to cart<span><i class="ion-ios-cart ml-1"></i></span></a> 
+                                <a href="/singleproduct?productid=<%= product._id %>" class="buy-now text-center py-2"> view details</a> 
                                 <!-- <a href="#" class="buy-now text-center py-2">Buy now<span><i></i></span></a> -->
                                 
                               <% }else{%>  
@@ -194,8 +194,8 @@
                         <i class="icon icon-arrow-down3"></i>
                         <select name="minPrice" id="minPrice" class="form-control">
                           <option value="0">Any</option>
-                          <option value="200">₹200</option>
                           <option value="500">₹500</option>
+                          <option value="1000">₹1,000</option>
                           <!-- Add more options as needed -->
                         </select>
                       </div>
@@ -208,8 +208,8 @@
                         <i class="icon icon-arrow-down3"></i>
                         <select name="maxPrice" id="maxPrice" class="form-control">
                           <option value="Infinity">Any</option>
-                          <option value="1000">₹1,000</option>
                           <option value="2000">₹2,000</option>
+                          <option value="4000">₹4,000</option>
                           <!-- Add more options as needed -->
                         </select>
                       </div>

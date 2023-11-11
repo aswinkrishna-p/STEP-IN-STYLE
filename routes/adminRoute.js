@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express();
 const adminController = require('../controllers/admincontroller');
-const path = require('path')
 const {loggedin,loggedout} = require('../middleware/adminAuth')
 const multer =require('multer')
 
@@ -27,6 +26,10 @@ router.post('/login',adminController.postlogin)
 
 router.get('/dashboard',loggedin,adminController.getdashboard)
 
+router.get('/adminsales',loggedin,adminController.Adminsales)
+
+router.post('/adminsales/download',loggedin,adminController.salesReportDownload)
+
 
 
 // user management
@@ -41,9 +44,9 @@ router.patch('/userlist/userstatus',adminController.getBlockandUnblock)
 
 router.get('/productlist',loggedin,adminController.getProductlist)
 
-router.post('/productlist',upload.array('photo',5),adminController.getaddproductPost)
-
 router.get('/addproduct',loggedin,adminController.getaddproduct)
+
+router.post('/productlist',upload.array('photo',4),adminController.getaddproductPost)
 
 router.post('/searchproduct',adminController.SearchProduct)
 
@@ -51,7 +54,11 @@ router.patch('/productlist/productstatus',adminController.productListUnlist)
 
 router.get('/editproduct',loggedin,adminController.geteditproduct)
 
-router.post('/productlist/:id',upload.array('photo',5),adminController.editproductpost)
+router.post('/productlist/:id',upload.array('photo',4),adminController.editproductpost)
+
+
+
+router.patch('/removeImage/:id', adminController.removeImage);
 
 
 //category 

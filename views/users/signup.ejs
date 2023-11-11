@@ -33,7 +33,7 @@
                             </div>
                             <% } %>
                             
-                        <form class="row contact_form" action="/signup" method="post" >
+                        <form class="row contact_form" action="/signup" method="post" onsubmit=" return  validateForm()">
                             <div class="col-md-6 form-group">
                                 <input type="text" class="form-control" id="first_name" name="first_name" value=""
                                     placeholder="First Name" required>
@@ -65,7 +65,7 @@
                                     <small id="cPasswordError"></small> 
                             </div>
                             <div class="col-md-12 form-group">
-                                <button type="submit" onclick="validateForm()" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary">
                                     Sign up
                                 </button>
                             </div>

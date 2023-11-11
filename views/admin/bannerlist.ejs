@@ -52,48 +52,68 @@
   </div>
 
 
+ 
+
+
+
 
  <!-- add banner -->
 
 
- <div class="container-fluid" style="margin-left: 19em; width: 70%;">
-    <div class="mt-4 p-4 border rounded mx-auto">
-        <h1 class="mb-4">Add Banner</h1>
-        <!-- Form for adding a new banner -->
-        <form action="/admin/addbanner" method="POST" enctype="multipart/form-data" id="bannerForm">
+ <!-- The Modal -->
+<div class="modal fade" id="addBannerModal" tabindex="-1" aria-labelledby="addBannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBannerModalLabel">Add Banner</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <!-- Modal Body (Your form goes here) -->
+        <div class="modal-body">
+          <!-- Form for adding a new banner -->
+          <form action="/admin/addbanner" method="POST" enctype="multipart/form-data" id="bannerForm" onsubmit="return validateBannerForm()">
             <!-- Banner Image -->
             <div class="form-group">
-                <label for="bannerImage" class="form-label">Banner Image (JPG or PNG only)</label>
-                <input type="file" class="form-control" id="bannerImage" name="photo" accept=".jpg, .jpeg, .png" required>
-                <div id="imageError" style="color: red;"></div>
+              <label for="bannerImage" class="form-label">Banner Image (JPG or PNG only)</label>
+              <input type="file" class="form-control" id="bannerImage" name="photo" accept=".jpg, .jpeg, .png" required>
+              <div id="imageError" style="color: red;"></div>
             </div>
+            
             <!-- Banner Title -->
             <div class="form-group">
-                <label for="bannerTitle" class="form-label">Banner Title</label>
-                <input type="text" class="form-control" id="bannerTitle" placeholder="Enter banner title" required name="title">
+              <label for="bannerTitle" class="form-label">Banner Title</label>
+              <input type="text" class="form-control" id="bannerTitle" placeholder="Enter banner title" required name="title">
             </div>
+            
             <!-- Banner Category -->
             <div class="form-group">
-                <label for="bannerCategory" class="form-label">Banner Category</label>
-                <select class="form-select" id="bannerCategory" required name="category">
-                    <option value="">Select a category</option>
-                    <% categories.forEach(category => { %>
-                        <option value="<%= category %>"><%= category %></option>
-                    <% }) %>
-                </select>
+              <label for="bannerCategory" class="form-label">Banner Category</label>
+              <select class="form-select" id="bannerCategory" required name="category">
+                <option value="">Select a category</option>
+                <% categories.forEach(category => { %>
+                  <option value="<%= category %>"><%= category %></option>
+                <% }) %>
+              </select>
             </div>
-            <button type="submit" class="btn btn-success mt-4" name="submit">Add Banner</button>
-        </form>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success" name="submit">Add Banner</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-</div>
-
+  </div>
 
 
 
 
 
 <% for(let i = 0; i < Banner.length; i++) { %>
-
 
 <!-- Modal for editing a banner -->
 <div class="modal fade" id="editBannerModal<%= Banner[i]._id %>" tabindex="-1" aria-labelledby="editBannerModalLabel" aria-hidden="true">
@@ -105,7 +125,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form for editing a banner, similar to the "Add Banner" form -->
-                <form action="/admin/editbanner/<%= Banner[i]._id %>" method="POST" enctype="multipart/form-data">
+                <form action="/admin/editbanner/<%= Banner[i]._id %>" method="POST" enctype="multipart/form-data" onsubmit="return validateEditBannerForm()">
                     <!-- Banner Image -->
                     <div class="form-group">
                         <label for="editBannerImage" class="form-label">Banner Image</label>
@@ -114,7 +134,8 @@
                     <!-- Banner Title -->
                     <div class="form-group">
                         <label for="editBannerTitle" class="form-label">Banner Title</label>
-                        <input type="text" class="form-control" id="editBannerTitle" placeholder="Enter banner title" name="title" value="<%= Banner[i].title %>">
+                        <input type="text" class="form-control" id="editBannerTitle<%= Banner[i]._id %>" placeholder="Enter banner title" name="title" value="<%= Banner[i].title %>">
+                        <span id="editBannerTitleError<%= Banner[i]._id %>" style="color: red;"></span>
                     </div>
                     <!-- Banner Category -->
                     <div class="form-group">
@@ -145,6 +166,13 @@
 
 <!-- bannerlist -->
 <div class="container mt-5" style="margin-left: 19em;">
+    <div class="button" style="display: flex; justify-content: flex-end;">
+        
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBannerModal">
+          Add Banner
+        </button>
+     
+    </div>
     <h1>Banner List</h1>
     <table class="table table-bordered">
         <thead>
@@ -181,10 +209,69 @@
     </table>
 </div>
 
+<script>
+    function validateEditBannerForm(index) {
+        const editBannerTitleInput = document.getElementById(`editBannerTitle${index}`);
+        const editBannerTitleError = document.getElementById(`editBannerTitleError${index}`);
 
+        // Reset previous error
+        editBannerTitleError.textContent = '';
+
+        // Get the entered title
+        const title = editBannerTitleInput.value.trim();
+
+        // Validate Banner Title
+        if (!title) {
+            editBannerTitleError.textContent = 'Please enter a banner title.';
+            return false; // Prevent form submission
+        }
+
+        // Your additional validation logic goes here
+
+        // If all validation passes, return true to allow form submission
+        return true;
+    }
+</script>
        
 
-<!-- Add this script at the end of your bannerlist.ejs file -->
+<script>
+    function validateBannerForm() {
+      // Get form elements
+      var bannerImage = document.getElementById('bannerImage');
+      var bannerTitle = document.getElementById('bannerTitle');
+      var bannerCategory = document.getElementById('bannerCategory');
+      var imageError = document.getElementById('imageError');
+  
+      // Reset previous errors
+      imageError.textContent = '';
+  
+      // Validate Banner Image (You may add more validation as needed)
+      if (!bannerImage.value.trim()) {
+        imageError.textContent = 'Please select a banner image.';
+        return false; // Prevent form submission
+      }
+  
+      // Validate Banner Title
+      if (!bannerTitle.value.trim()) {
+        alert('Please enter a banner title.');
+        return false; // Prevent form submission
+      }
+  
+      // Validate Banner Category
+      if (bannerCategory.value === '') {
+        alert('Please select a banner category.');
+        return false; // Prevent form submission
+      }
+  
+      // Your additional validation logic goes here
+  
+      // If all validation passes, return true to allow form submission
+      return true;
+    }
+  </script>
+
+
+
 
 
 
@@ -279,6 +366,7 @@ function bannerListUnlist(_id, isListed) {
 
 
 </script>
+
 
 
 

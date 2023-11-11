@@ -7,7 +7,7 @@ const cPasswordError = document.getElementById("cPasswordError")
 
 const nameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z])$/;
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/
+const phoneRegex = /^(\+\d{1,3}[- ]?)?(?!0+$)\d{10}$/;
 const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{6,}$/
 
 
@@ -86,7 +86,7 @@ function validatePassword() {
 }
 function confirmPassword() {
     let password = document.getElementById("password").value
-    let cPassword = document.getElementById("confirmPassword").value
+    let cPassword = document.getElementById("confirm_password").value
     if (cPassword.length === 0) {
         cPasswordError.innerHTML = "Password required!";
         return false;

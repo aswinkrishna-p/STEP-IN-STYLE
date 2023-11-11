@@ -83,89 +83,105 @@
 
 
         <!-- Modal for "Add New Address" -->
-<div class="modal fade" id="addNewAddressModal" tabindex="-1" role="dialog" aria-labelledby="addNewAddressModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="addNewAddressModalLabel">Add New Address</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <!-- Your form fields for adding a new address -->
-              <form id="newAddressForm">
-                  <div class="row">
-                      <div class="col-md-6">
-                          <!-- First Name -->
-                          <div class="form-group">
-                              <label for="newFirstName">First Name</label>
-                              <input type="text" class="form-control" id="newFirstName" name="newFirstName" required>
+        <div class="modal fade" id="addNewAddressModal" tabindex="-1" role="dialog" aria-labelledby="addNewAddressModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="addNewAddressModalLabel">Add New Address</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <!-- Your form fields for adding a new address -->
+                      <form id="newAddressForm">
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <!-- First Name -->
+                                  <div class="form-group">
+                                      <label for="newFirstName">First Name</label>
+                                      <input type="text" class="form-control" id="newFirstName" name="newFirstName" required>
+                                      <!-- Add a span element for error message -->
+                                      <span class="text-danger" id="firstNameError"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-6">
+                                  <!-- Last Name -->
+                                  <div class="form-group">
+                                      <label for="newLastName">Last Name</label>
+                                      <input type="text" class="form-control" id="newLastName" name="newLastName" required>
+                                      <!-- Add a span element for error message -->
+                                      <span class="text-danger" id="lastNameError"></span>
+                                  </div>
+                              </div>
                           </div>
-                      </div>
-                      <div class="col-md-6">
-                          <!-- Last Name -->
+                          
+                          <!-- Street Address -->
                           <div class="form-group">
-                              <label for="newLastName">Last Name</label>
-                              <input type="text" class="form-control" id="newLastName" name="newLastName" required>
+                              <label for="newStreetAddress">Street Address</label>
+                              <input type="text" class="form-control" id="newStreetAddress" name="newStreetAddress" placeholder="House number and street name" required>
+                              <!-- Add a span element for error message -->
+                              <span class="text-danger" id="streetAddressError"></span>
                           </div>
-                      </div>
+                          
+                          <!-- State -->
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <div class="form-group">
+                                      <label for="newState">State</label>
+                                      <input type="text" class="form-control" id="newState" name="newState" placeholder="State" required>
+                                      <!-- Add a span element for error message -->
+                                      <span class="text-danger" id="stateError"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="form-group">
+                                      <label for="newTownCity">Town / City</label>
+                                      <input type="text" class="form-control" id="newTownCity" name="newTownCity" placeholder="Town / City" required>
+                                      <!-- Add a span element for error message -->
+                                      <span class="text-danger" id="townCityError"></span>
+                                  </div>
+                              </div>
+                          </div>
+      
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <!-- Postcode/ZIP -->
+                                  <div class="form-group">
+                                      <label for = "newPostcodeZip">Postcode / ZIP *</label>
+                                      <input type="text" class="form-control" id="newPostcodeZip" name="newPostcodeZip" placeholder="Postcode / ZIP" required>
+                                      <!-- Add a span element for error message -->
+                                      <span class="text-danger" id="postcodeZipError"></span>
+                                  </div>
+                              </div>
+                              <div class="col-md-6">
+                                  <!-- District -->
+                                  <div class="form-group">
+                                      <label for="newDistrict">District</label>
+                                      <input type="text" class="form-control" id="newDistrict" name="newDistrict" placeholder="District" required>
+                                      <!-- Add a span element for error message -->
+                                      <span class="text-danger" id="districtError"></span>
+                                  </div>
+                              </div>
+                          </div>
+      
+                          <!-- Phone -->
+                          <div class="form-group">
+                              <label for="newPhone">Phone</label>
+                              <input type="text" class="form-control" id="newPhone" name="newPhone" placeholder="Phone" required>
+                              <!-- Add a span element for error message -->
+                              <span class="text-danger" id="phoneError"></span>
+                          </div>
+                      </form>
                   </div>
-   
-                  <!-- Street Address -->
-                  <div class="form-group">
-                      <label for="newStreetAddress">Street Address</label>
-                      <input type="text" class="form-control" id="newStreetAddress" name="newStreetAddress" placeholder="House number and street name">
-                  </div>
-                  
-                  <!-- State -->
-                  <div class="row">
-                      <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="newState">State</label>
-                      <input type="text" class="form-control" id="newState" name="newState" placeholder="State">
-                  </div>
-                  </div>
-                  <!-- Town/City -->
-                  <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="newTownCity">Town / City</label>
-                      <input type="text" class="form-control" id="newTownCity" name="newTownCity" placeholder="Town / City">
-                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" id="saveNewAddressBtn" onclick="validateAndSaveAddress()">Save Address</button>
                   </div>
               </div>
-
-                  <div class="row">
-                      <div class="col-md-6">
-                          <!-- Postcode/ZIP -->
-                          <div class="form-group">
-                              <label for="newPostcodeZip">Postcode / ZIP *</label>
-                              <input type="text" class="form-control" id="newPostcodeZip" name="newPostcodeZip" placeholder="Postcode / ZIP" required>
-                          </div>
-                      </div>
-                      <div class="col-md-6">
-                          <!-- District -->
-                          <div class="form-group">
-                              <label for="newDistrict">District</label>
-                              <input type="text" class="form-control" id="newDistrict" name="newDistrict" placeholder="District">
-                          </div>
-                      </div>
-                  </div>
-
-                  <!-- Phone -->
-                  <div class="form-group">
-                      <label for="newPhone">Phone</label>
-                      <input type="text" class="form-control" id="newPhone" name="newPhone" placeholder="Phone">
-                  </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="saveNewAddressBtn">Save Address</button>
           </div>
       </div>
-  </div>
-</div>
+      
 
 
     <!-- Edit Address Modal -->
@@ -188,49 +204,49 @@
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editFirstname">First Name:</label>
-                              <input type="text" id="editFirstname" name="editFirstname" class="form-control" value="<%= address.firstname %>">
+                              <input type="text" id="editFirstname" name="editFirstname" class="form-control" value="<%= address.firstname %>"required>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editLastname">Last Name:</label>
-                              <input type="text" id="editLastname" name="editLastname" class="form-control" value="<%= address.lastname %>">
+                              <input type="text" id="editLastname" name="editLastname" class="form-control" value="<%= address.lastname %>"required>
                           </div>
                       </div>
                   </div>
                   <div class="form-group">
                       <label for="editHouse">Street Address:</label>
-                      <input type="text" id="editHouse" name="editHouse" class="form-control" value="<%= address.house %>">
+                      <input type="text" id="editHouse" name="editHouse" class="form-control" value="<%= address.house %>"required>
                   </div>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editCity">Town/City:</label>
-                              <input type="text" id="editCity" name="editCity" class="form-control" value="<%= address.city %>">
+                              <input type="text" id="editCity" name="editCity" class="form-control" value="<%= address.city %>"required>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editState">State:</label>
-                              <input type="text" id="editState" name="editState" class="form-control" value="<%= address.state %>">
+                              <input type="text" id="editState" name="editState" class="form-control" value="<%= address.state %>"required>
                           </div>
                       </div>
                   </div>
                   <div class="form-group">
                       <label for="editPost">Postcode/ZIP:</label>
-                      <input type="text" id="editPost" name="editPost" class="form-control" value="<%= address.post %>">
+                      <input type="number" id="editPost" name="editPost" class="form-control" value="<%= address.post %>"required>
                   </div>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editDistrict">District:</label>
-                              <input type="text" id="editDistrict" name="editDistrict" class="form-control" value="<%= address.district %>">
+                              <input type="text" id="editDistrict" name="editDistrict" class="form-control" value="<%= address.district %>"required>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editContact">Contact:</label>
-                              <input type="text" id="editContact" name="editContact" class="form-control" value="<%= address.contact %>">
+                              <input type="number" id="editContact" name="editContact" class="form-control" value="<%= address.contact %>"required>
                           </div>
                       </div>
                   </div>
@@ -341,7 +357,6 @@ function setDefaultAddress(addressId) {
 
 
 <script>
-
   // Function to show the "Add New Address" modal
   function showAddNewAddressModal() {
       $('#addNewAddressModal').modal('show');
@@ -354,6 +369,68 @@ function setDefaultAddress(addressId) {
 
   // Add click event listener to the "Add a New Address" link
   document.getElementById('addNewAddressLink').addEventListener('click', showAddNewAddressModal);
+
+  // Function to validate the form before saving
+  function validateAndSaveAddress() {
+      const form = document.getElementById('newAddressForm');
+      const firstName = document.getElementById('newFirstName');
+      const lastName = document.getElementById('newLastName');
+      const streetAddress = document.getElementById('newStreetAddress');
+      const state = document.getElementById('newState');
+      const townCity = document.getElementById('newTownCity');
+      const postcodeZip = document.getElementById('newPostcodeZip');
+      const district = document.getElementById('newDistrict');
+      const phone = document.getElementById('newPhone');
+      
+      // Reset error messages
+      document.querySelectorAll('.text-danger').forEach(element => {
+          element.textContent = '';
+      });
+
+      // Trim all field values
+      firstName.value = firstName.value.trim();
+      lastName.value = lastName.value.trim();
+      streetAddress.value = streetAddress.value.trim();
+      state.value = state.value.trim();
+      townCity.value = townCity.value.trim();
+      postcodeZip.value = postcodeZip.value.trim();
+      district.value = district.value.trim();
+      phone.value = phone.value.trim();
+
+      if (form.checkValidity()) {
+          // If the form is valid, save the address
+          saveNewAddress();
+      } else {
+          // If the form is not valid, show validation feedback
+          form.classList.add('was-validated');
+
+          // Show specific error messages
+          if (!firstName.checkValidity()) {
+              document.getElementById('firstNameError').textContent = 'Please enter a valid first name.';
+          }
+          if (!lastName.checkValidity()) {
+              document.getElementById('lastNameError').textContent = 'Please enter a valid last name.';
+          }
+          if (!streetAddress.checkValidity()) {
+              document.getElementById('streetAddressError').textContent = 'Please enter a valid street address.';
+          }
+          if (!state.checkValidity()) {
+              document.getElementById('stateError').textContent = 'Please enter a valid state.';
+          }
+          if (!townCity.checkValidity()) {
+              document.getElementById('townCityError').textContent = 'Please enter a valid town or city.';
+          }
+          if (!postcodeZip.checkValidity()) {
+              document.getElementById('postcodeZipError').textContent = 'Please enter a valid postcode or ZIP.';
+          }
+          if (!district.checkValidity()) {
+              document.getElementById('districtError').textContent = 'Please enter a valid district.';
+          }
+          if (!phone.checkValidity()) {
+              document.getElementById('phoneError').textContent = 'Please enter a valid phone number.';
+          }
+      }
+  }
 
   // Function to handle form submission for adding a new address
   function saveNewAddress() {
@@ -395,11 +472,6 @@ function setDefaultAddress(addressId) {
           console.error('An error occurred:', error);
       });
   }
-
-  // Add click event listener to the "Save Address" button within the modal
-  document.getElementById('saveNewAddressBtn').addEventListener('click', saveNewAddress);
-
-
 </script>
 
 

@@ -6,6 +6,7 @@ const subcategory = require('../models/subCategoryModel')
 const banner = require('../models/bannerModel')
 const orders = require('../models/orderModel')
 const Coupon = require('../models/couponModel');
+const { Parser } = require('json2csv');
 
 
 
@@ -56,8 +57,26 @@ const getdashboard = async (req,res) =>{
     if(req.session.admin){
         const totalOrders = await orders.countDocuments({})
         const totalProducts = await product.countDocuments({listed:'true'})
-
         const deliveredOrders = await orders.find({orderStatus:'Delivered'})
+
+
+        
+        const pipeline = [
+          {
+            $match: { orderStatus: 'Delivered' }
+          },
+          {
+            $group: {
+              _id: '$paymentMode',
+              count: { $sum: 1 }
+            }
+          }
+        ];
+        
+        const paymentMethodCounts = await orders.aggregate(pipeline).exec();
+        
+        // console.log(paymentMethodCounts);
+
 //  console.log(deliveredOrders);
         const blockedUsers = await User.countDocuments({is_blocked:'true'})
         const unblockedUsers = await User.countDocuments({is_blocked:'false'})
@@ -65,7 +84,7 @@ const getdashboard = async (req,res) =>{
         for(const orders of deliveredOrders){
             totalSales += orders.total
         }
-        console.log(totalSales);
+        // console.log(totalSales)
 
         const monthSales = await orders.aggregate([
             {
@@ -114,9 +133,108 @@ const getdashboard = async (req,res) =>{
         //   const totalSalesFromMonthly = monthSales.reduce((total, month) => total + month.monthlySales, 0);
 // console.log(totalSalesFromMonthly);
          
-        res.render('admin/dashboard',{totalOrders,totalProducts,totalSales,monthSales ,unblockedUsers,blockedUsers})
+        res.render('admin/dashboard',{totalOrders,totalProducts,totalSales,monthSales ,unblockedUsers,blockedUsers,paymentMethodCounts})
     }
 }
+
+// sales 
+
+const Adminsales = async(req ,res) =>{
+        const from = req.query.from
+        const to = req.query.to
+        let selectedStatus = ''
+        let salesReport
+
+        try {
+            salesReport = await orders.aggregate([
+                { $match: { orderStatus: "Delivered" } },
+                {
+                  $unwind: "$products",
+                },
+                {
+                  $lookup: {
+                    from: "products",
+                    localField: "products.product",
+                    foreignField: "_id",
+                    as: "productDetails",
+                  },
+                },
+                { $unwind: "$productDetails" },
+                {
+                    $project: {
+                        order_id: "$_id",
+                        customer_id: "$customer",
+                        product_id: "$products.product",  // Assuming this is the reference to the product
+                        product_name: "$products.name", // Should correctly populate product name
+                        product_price: "$productDetails.price",
+                        product_quantity: "$products.quantity",
+                        order_date: "$orderDate",
+                        payment_method: "$paymentMode",
+                        total_amount: "$total",
+                        address: {
+                          name: "$address.name",
+                          house: "$address.house",
+                          post: "$address.post",
+                          city: "$address.city",
+                          state: "$address.state",
+                          district: "$address.district",
+                          contact: "$address.contact",
+                        },
+                      },
+                },
+                { $sort: { order_id: -1 } },
+              ]);
+
+             
+
+              if (from && to) {
+                const fromDate = new Date(from);
+                const toDate = new Date(to);
+              
+                salesReport = salesReport.filter((prd) => {
+                  const orderDate = new Date(prd.order_date);
+                  return orderDate >= fromDate && orderDate <= new Date(toDate.getTime() + 24 * 60 * 60 * 1000);
+                });
+               
+              }
+
+              res.render('admin/SalesReport',{salesReport,  selectedStatus})
+              
+        } catch (error) {
+            console.log(error);
+        }
+}
+
+const salesReportDownload = async (req , res) =>{
+    try {
+      const data = req.body
+      console.log(req.body);
+      let file = [];
+      for (let i = 0; i < data.date.length; i++) {
+          const row = {
+              date: data.date[i],
+              order_id: data.order_id[i],
+              product: data.product[i],
+              qty: data.qty[i], // Use 'qty' instead of 'product_quantity'
+              payment: data.payment[i], // Use 'payment' instead of 'payment_method'
+              amount: data.amount[i], // Use 'amount' instead of 'total_amount'
+          };
+          file.push(row);
+      
+          console.log(row,'rowwwwwwwwwwwww');
+        }
+        console.log(file);
+      const json2csv = new Parser()
+      const csv = json2csv.parse(file)
+  
+      res.attachment(`report-${Date.now()}.csv`)
+      res.status(200).send(csv) 
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 // usermanagement
 const getusermanager = async(req,res) =>{
@@ -173,19 +291,28 @@ const searchUsers = async (req, res) => {
 
 // productmanagement
 
-const getProductlist =  async(req ,res ) =>{
-
+const getProductlist = async (req, res) => {
     try {
-        const products =await product.find()
-        
-        res.render('admin/productList',{products})
-    
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Error in fetching product data')
-    }
+      const perPage = 7; // Number of products to display per page
+      const page = parseInt(req.query.page) || 1; // Get the page number from the query parameter or default to 1
+  
+      const skip = (page - 1) * perPage;
+      
+      const products = await product.find()
+        .skip(skip)
+        .limit(perPage);
 
-}
+        const totalProducts = await product.countDocuments();
+        const totalPages = Math.ceil(totalProducts / perPage);
+
+      
+      res.render('admin/productList', { products, currentPage: page ,totalPages});
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send('Error in fetching product data');
+    }
+  };
+  
 
 const getaddproduct = async (req, res) => {
     try {
@@ -205,15 +332,15 @@ const getaddproduct = async (req, res) => {
 const getaddproductPost = async(req, res) =>{
     try {
         const {productName,category,description,price,stock,gender,offer,expiryDate} =req.body
-        console.log(req.body,'bodyyyyyyy');
-        const photo = req.files.map((file) => file.filename)
-        if(price<0){
-          return  res.status(400).send("price can't be negavite")
-        }
         
-        if(!productName.trim()){
-            return res.status(400).send("product name field cant't be empty")
-        }
+        const photo = req.files.map((file) => file.filename)
+        // if(price<0){
+        //   return  res.status(400).send("price can't be negavite")
+        // }
+        
+        // if(!productName.trim()){
+        //     return res.status(400).send("product name field cant't be empty")
+        // }
         existingProduct = await product.findOne({ productName: { $regex: new RegExp('^' + productName + '$', 'i') },});
           
           if (existingProduct) {
@@ -232,7 +359,7 @@ const getaddproductPost = async(req, res) =>{
             offer:offer,
             expiryDate
         })
-        console.log(newProduct,'success');
+       
         await newProduct.save()
         res.redirect('/admin/productlist')
     } catch (error) {
@@ -244,18 +371,35 @@ const getaddproductPost = async(req, res) =>{
 
 // search product in productlist
 
-const SearchProduct = async (req, res) =>{
-    try {
-        const searchProd = req.body.Search
+const SearchProduct = async (req, res) => {
+  try {
+      const searchProd = req.body.Search;
+      
+      // Calculate the total number of pages based on the search results
+      const perPage = 10; // Number of products per page (adjust as needed)
+      const page = req.query.page || 1; // Get the page from the request query parameters
 
-        const prod = await product.find({productName:{$regex:searchProd, $options :'i'}})
+      const prod = await product
+          .find({ productName: { $regex: searchProd, $options: 'i' } })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
 
-        res.render('admin/productlist',{products: prod})
+      // You also need to count the total number of products for pagination
+      const totalCount = await product.countDocuments({ productName: { $regex: searchProd, $options: 'i' }})
 
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+      // Calculate the total number of pages
+      const totalPages = Math.ceil(totalCount / perPage);
+
+      res.render('admin/productlist', {
+          products: prod,
+          currentPage: page,
+          totalPages: totalPages,
+      });
+  } catch (error) {
+      console.log(error.message);
+  }
+};
+
 
 // product list and unlist
 
@@ -319,28 +463,6 @@ const editproductpost =async (req ,res) =>{
     
         updatedProduct.photo = updatedProduct.photo;
       }
-        if (!updatedProduct) {
-            return res.status(404).send('Product not found');
-        }
-
-        if(price<0){
-            return res.status(400).send("price can't be negative")
-        }
-        if(stock<0){
-            return res.status(400).send("stock can't be negative")
-        }
-        if(offer<0){
-            return res.status(400).send("offer price can't be negative")
-        }
-        if(!productName.trim()){
-            return res.status(400).send("product name field cant't be empty")
-        }
-        // existingProduct = await product.findOne({ productName: { $regex: new RegExp('^' + productName + '$', 'i') },});
-          
-        // if (existingProduct) {
-        //   return res.status(400).send('Product already exists');
-        // }
-       
         
         // update the product fields 
 
@@ -355,10 +477,7 @@ const editproductpost =async (req ,res) =>{
         updatedProduct.orginalPrice = orginalPrice
         
 
-        // if(photo){
-
-        //     updatedProduct.photo =photo
-        // }
+      
 
         await updatedProduct.save()
         res.redirect('/admin/productlist')
@@ -366,6 +485,54 @@ const editproductpost =async (req ,res) =>{
         console.log(error.message);
         res.status(500).send('internal server error')
     }
+}
+
+const removeImage = async (req , res)=>{
+  try {
+     // Retrieve the image index from the request query
+    //  const id = req.params.id;
+     const imageId=req.body.url
+
+     console.log("remove img");
+
+     // Assuming you have access to the product
+     // Remove the image at the specified index from the product's image array
+     const productId = req.params.id; // Assuming you get the product ID from the route parameter
+     const prd = await product.findById(productId);
+
+     console.log(productId);
+ 
+     if (!product) {
+       return res.status(404).json({ success: false, message: 'Product not found' });
+     }
+
+     let indexToDelete = -1;
+    for (let i = 0; i < prd.photo.length; i++) {
+      if (prd.photo[i] === imageId) {
+        indexToDelete = i;
+        break;
+      }
+    }
+    
+
+    console.log(indexToDelete);
+
+    if (indexToDelete === -1) {
+      return res.status(404).json({ response: "Image not found in product" });
+    }
+
+    // Remove the image from the images array
+    prd.photo.splice(indexToDelete, 1);
+
+    // Save the updated product back to the database
+    await prd.save();
+
+       return res.json({ success: true, message: 'Image removed successfully' });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 }
 
 // category 
@@ -581,7 +748,7 @@ const deleteBannerController = async (req, res) => {
 
 const getOrders = async (req,res) =>{
     try {
-        const order = await orders.find().populate('customer').exec()
+      const order = await orders.find().populate('customer').sort({ orderDate: -1 }).exec();
         
         res.render('admin/orderlist',{order})
     } catch (error) {
@@ -597,16 +764,17 @@ const orderstatus = async (req ,res) =>{
 
         const orderdata = await orders.findById(orderId)
 
-        // console.log(orderdata,'order dataaaaaaaaaaaaaa');
-
         const userdata = orderdata.customer
 
         const totalAmount = orderdata.total
 
-        console.log('customer',userdata,totalAmount);
+        const currentDate = new Date();
+    const date =  currentDate.toDateString();
+
+        
 
         if(newStatus === "returned"){
-                console.log('lllllllllllllllllllldddddd');
+            
             const updatedOrder = await orders.findByIdAndUpdate(
               orderId,
               { $set: { orderStatus: newStatus } },
@@ -614,9 +782,15 @@ const orderstatus = async (req ,res) =>{
             );
 
              await User.findByIdAndUpdate(userdata, {
-                $inc: { 'wallet.balance': totalAmount },
-                $push: { 'wallet.transactions': updatedOrder._id.toString() }
-              });
+              $inc: { "wallet.balance": totalAmount },
+              $push: { "wallet.transactions":{
+                id:updatedOrder._id,
+                date: date, // Replace this with the actual date value
+                amount: totalAmount, // Replace this with the actual amount value
+                status: 'true', // Replace this with the actual status value
+              } 
+             },
+              }); 
 
              
 
@@ -627,13 +801,13 @@ const orderstatus = async (req ,res) =>{
                 { $set: { orderStatus: newStatus } },
                 { new: true }
               );
-              console.log('inside cancelled');
+              
 
-              const data = await User.findByIdAndUpdate(userdata, {
+               await User.findByIdAndUpdate(userdata, {
                 $inc: { 'wallet.balance': totalAmount },
                 $push: { 'wallet.transactions': updatedOrder._id.toString() }
               });
-              console.log(data,'wallet');
+              
 
               const productsToUpdate = orderdata.products;
 
@@ -644,7 +818,7 @@ const orderstatus = async (req ,res) =>{
           
                 // Find the product in the products collection
                 const Product = await product.findById(productId);
-                console.log(Product,'else if  case');
+               
                 if (Product) {
                   // Increment the stock by the canceled quantity
                   Product.stock += quantity;
@@ -699,7 +873,7 @@ const orderstatus = async (req ,res) =>{
     
           // Find the product in the products collection
           const Product = await product.findById(productId);
-                    console.log(Product,'else case');
+                   
           if (Product) {
             // Increment the stock by the canceled quantity
             Product.stock += quantity;
@@ -754,7 +928,7 @@ const createCoupon = async (req, res) => {
         // Save the new coupon to the database
         await newCoupon.save();
         res.redirect('/admin/coupons')
-        // res.status(201).json({ message: 'Coupon added successfully.' });
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
@@ -832,6 +1006,8 @@ module.exports ={
     getLogin,
     postlogin,
     getdashboard,
+    Adminsales,
+    salesReportDownload,
     getusermanager ,
     getProductlist,
     getaddproduct,
@@ -842,6 +1018,7 @@ module.exports ={
     productListUnlist,
     geteditproduct,
     editproductpost,
+    removeImage ,
     getCategorylist,
     addcategoryPost,
     categoryListUnlist,

@@ -45,22 +45,60 @@
     </div>
   </div>
   
-  <div class="container">
+  <!-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 col-12">
             <div class="add-category my-5 p-5 fs-5 bg-light">
-                <form action="/admin/addcategory" method="post" class="form-group">
+               
+                              
+                <form action="/admin/addcategory" method="post" class="form-group" onsubmit="return validateForm()" >
                     <h2 class="text-center fs-3">Add New Category</h2>
                     <div class="form-group mt-3">
                         <label for="categoryName">Category Name:</label><br>
-                        <input type="text" id="categoryName" name="categoryName" class="form-control" placeholder="Enter new category name" required>
+                        <input type="text" id="categoryName" name="categoryName" class="form-control" placeholder="Enter new category name" >
+                        <span id="categoryNameError" style="color: red;"></span>
                     </div>
                     <div class="form-group mt-3">
                         <label for="gender">Gender:</label><br>
                         <select id="gender" name="gender" class="form-control" required>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
-                            <!-- <option value="other">Other</option> -->
+                           
+                        </select>
+                    </div>
+                    <div class="add-category text-center">
+                        <button type="submit" class="btn btn-success px-5">Add Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+<!-- Modal for adding a new category -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/addcategory" method="post" class="form-group" onsubmit="return validateForm()">
+                    <h2 class="text-center fs-3">Add New Category</h2>
+                    <div class="form-group mt-3">
+                        <label for="categoryName">Category Name:</label><br>
+                        <input type="text" id="categoryName" name="categoryName" class="form-control" placeholder="Enter new category name">
+                        <span id="categoryNameError" style="color: red;"></span>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="gender">Gender:</label><br>
+                        <select id="gender" name="gender" class="form-control" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
                         </select>
                     </div>
                     <div class="add-category text-center">
@@ -72,11 +110,19 @@
     </div>
 </div>
 
+
 <!-- Content Start -->
 <div class="container-xxl position-relative bg-white d-flex p-0">
  
-
     <div class="table-responsive" style="margin-left: 17em; margin-right: 3em;" >
+        <div class="button" style="display: flex; justify-content: flex-end;">
+        
+            <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                Add New Category
+            </button>
+        
+        </div>
+        <h2>Available Categories</h2>
         <table class="table table-striped table-hover mt-3">
             <thead>
                 <tr>
@@ -153,7 +199,33 @@
 
 
 
-<!-- JavaScript for Category Operations -->
+
+
+
+<script>
+    function validateForm() {
+        // Get the input value
+        const categoryName = document.getElementById("categoryName").value;
+        const categoryNameError = document.getElementById("categoryNameError");
+
+        // Check if the category name is empty
+        if (categoryName.trim() === "") {
+            categoryNameError.textContent = "Category Name is required.";
+            return false; // Prevent form submission
+        } else {
+            categoryNameError.textContent = ""; // Clear any previous error messages
+            return true; // Allow form submission
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
 <script>
 
     // Function to show the confirmation modal

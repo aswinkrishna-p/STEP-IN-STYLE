@@ -98,7 +98,7 @@
   </div>
   <div class="container">
     <div class="row">
-        <% for (let i = 1; i < products.length-1; i++) { %>
+        <% for (let i = 1; i < products.length-4; i++) { %>
             <a href="/singleproduct?productid=<%= products[i]._id %>">
                 <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
                     <div class="product d-flex flex-column" style="height: 400px;">
@@ -128,7 +128,7 @@
                                 <% if(user) {%>
 
                                     <a  onclick="addToWishlist('<%= products[i]._id %>')"class="buy-now text-center py-2">add to wishlist<span><i class="ion-ios-add ml-1"></i></span></a> 
-                                    <a href="#" class="buy-now text-center py-2">Buy now<span><i></i></span></a>
+                                    <a href="/singleproduct?productid=<%= products[i]._id %>" class="buy-now text-center py-2">View details </details><span><i></i></span></a>
                                     
                                   <% }else{%>  
                                     <a href="/login" class="buy-now text-center py-2">add to wishlist<span><i class="ion-ios-add ml-1"></i></span></a> <a href="/login" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>

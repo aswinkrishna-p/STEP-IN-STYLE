@@ -1,5 +1,6 @@
 const mongoose= require("mongoose")
 const { Decimal128 } = mongoose.Types;
+const { ObjectId } = require('mongoose');
 
 const user =mongoose.Schema({
 
@@ -83,7 +84,20 @@ const user =mongoose.Schema({
         type: Decimal128,
     default: 0.0
     },
-    transactions: [String]
+    transactions: [{
+        id: {
+          type: ObjectId,
+        },
+        date: {
+          type: Date,
+        },
+        amount: {
+          type: Number,
+        },
+        status: {
+          type: Boolean,
+        }
+      }]
 },
  referral:{
     type:String

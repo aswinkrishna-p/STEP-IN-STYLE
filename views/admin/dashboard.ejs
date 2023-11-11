@@ -116,7 +116,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <a href="/admin/dashboard/sales" style="text-decoration: none;"><div  class="text-xs font-weight-bold text-danger text-uppercase text-center mt-2 d-flex justify-content-center align-items-center">SALES REPORTS</div></a>
+              <a href="/admin/adminsales" style="text-decoration: none;"><div  class="text-xs font-weight-bold text-danger text-uppercase text-center mt-2 d-flex justify-content-center align-items-center">SALES REPORTS</div></a>
               </div>
             </div>
           </div>
@@ -129,23 +129,35 @@
       <canvas id="myChart"  ></canvas>
       <input type="hidden" name="monthlySales" id="monthlySales" value="<%= JSON.stringify(monthSales) %>">
     </div>
+ <div class="pie-charts" style="display: flex; justify-content: space-around;">
 
-    <div class="text-center" style="width: 30%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); height: 350px; margin-left: 20em; margin-top: 50px;">
+ 
+    <div class="text-center" style="width: 30%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); height: 350px; margin-left: 15em; margin-top: 50px;">
       <div class=" bg-light rounded p-3 w-100 " >
       
           <canvas id="myCharts" style="margin-top:10px;"></canvas>
           <div id="userCounts" data-blocked-count="<%= blockedUsers %>"
             data-non-blocked-count="<%= unblockedUsers %>"></div>
             
-        </div>
+          </div>
     </div>
 
-    <!-- <div class="pie-chart" style="width: 700px; height: 400px; margin-left: 20em;margin-top:8em;">
+    <div class="text-center" style="width: 30%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); height: 350px;  margin-top: 50px;">
+      <div class=" bg-light rounded p-3 w-100 " >
       
-      <canvas id="myCharts"></canvas>
-      
-      
-    </div> -->
+        <canvas id="mySecondPieChart" style="margin-top: 10px;"></canvas>
+        <input type="hidden" name="paymentMethodData" id="paymentMethodData" value="<%= JSON.stringify(paymentMethodCounts) %>">
+            
+          </div>
+    </div>
+
+  </div>
+
+    
+
+
+
+    
     
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -153,6 +165,38 @@
 
 
     <script>
+
+
+
+const secondPieChartCtx = document.getElementById('mySecondPieChart');
+const paymentMethodDataInput = document.getElementById('paymentMethodData');
+  const paymentMethodData = JSON.parse(paymentMethodDataInput.value);
+// Extract labels and data values
+const labels = paymentMethodData.map(item => item._id);
+const dataValues = paymentMethodData.map(item => item.count);
+
+// Define the data for the second pie chart
+const secondPieChartData = {
+  labels: labels,
+  datasets: [
+    {
+      data: dataValues,
+      backgroundColor: ['red', 'yellow', 'blue'], // Customize the colors
+    },
+  ],
+};
+
+new Chart(secondPieChartCtx, {
+  type: 'pie',
+  data: secondPieChartData,
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+  },
+});
+
+
+
       const ctxi = document.getElementById('myCharts');
       const userCountsElement = document.getElementById('userCounts');
         const blockedUserCount = parseInt(userCountsElement.getAttribute('data-blocked-count'));
@@ -211,6 +255,17 @@
           }
         }
       });
+
+
+
+
+ 
+
+
+
+
+
+   
     </script>
      
     <%- include('../layouts/adminfooter') %>
