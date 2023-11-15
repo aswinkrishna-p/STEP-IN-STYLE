@@ -196,7 +196,7 @@
           </div>
           <div class="modal-body">
               <!-- Add a form here for editing address fields -->
-              <form action="/editaddress" method="POST" id="editAddressForm">
+              <form action="/editaddress" method="POST" id="editAddressForm" onsubmit="return validateAndSaveEditAddress()">
               
                   <!-- Include input fields for editing address details -->
                   <input type="hidden" name="addressId" value="<%= address._id %>">
@@ -205,48 +205,56 @@
                           <div class="form-group">
                               <label for="editFirstname">First Name:</label>
                               <input type="text" id="editFirstname" name="editFirstname" class="form-control" value="<%= address.firstname %>"required>
+                              <div class="text-danger" id="editFirstnameError"></div>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editLastname">Last Name:</label>
                               <input type="text" id="editLastname" name="editLastname" class="form-control" value="<%= address.lastname %>"required>
+                              <div class="text-danger" id="editLastnameError"></div>
                           </div>
                       </div>
                   </div>
                   <div class="form-group">
                       <label for="editHouse">Street Address:</label>
                       <input type="text" id="editHouse" name="editHouse" class="form-control" value="<%= address.house %>"required>
+                      <div class="text-danger" id="editHouseError"></div>
                   </div>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editCity">Town/City:</label>
                               <input type="text" id="editCity" name="editCity" class="form-control" value="<%= address.city %>"required>
+                              <div class="text-danger" id="editCityError"></div>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editState">State:</label>
                               <input type="text" id="editState" name="editState" class="form-control" value="<%= address.state %>"required>
+                              <div class="text-danger" id="editStateError"></div>
                           </div>
                       </div>
                   </div>
                   <div class="form-group">
                       <label for="editPost">Postcode/ZIP:</label>
                       <input type="number" id="editPost" name="editPost" class="form-control" value="<%= address.post %>"required>
+                      <div class="text-danger" id="editPostError"></div>
                   </div>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editDistrict">District:</label>
                               <input type="text" id="editDistrict" name="editDistrict" class="form-control" value="<%= address.district %>"required>
+                              <div class="text-danger" id="editDistrictError"></div>
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="editContact">Contact:</label>
                               <input type="number" id="editContact" name="editContact" class="form-control" value="<%= address.contact %>"required>
+                              <div class="text-danger" id="editContactError"></div>
                           </div>
                       </div>
                   </div>
@@ -474,6 +482,78 @@ function setDefaultAddress(addressId) {
   }
 </script>
 
+
+<script>
+    function validateAndSaveEditAddress() {
+        const editFirstname = document.getElementById('editFirstname');
+        const editLastname = document.getElementById('editLastname');
+        const editHouse = document.getElementById('editHouse');
+        const editCity = document.getElementById('editCity');
+        const editState = document.getElementById('editState');
+        const editPost = document.getElementById('editPost');
+        const editDistrict = document.getElementById('editDistrict');
+        const editContact = document.getElementById('editContact');
+
+        // Reset error messages
+        document.querySelectorAll('.text-danger').forEach(element => {
+            element.textContent = '';
+        });
+
+        // Trim all field values
+        editFirstname.value = editFirstname.value.trim();
+        editLastname.value = editLastname.value.trim();
+        editHouse.value = editHouse.value.trim();
+        editCity.value = editCity.value.trim();
+        editState.value = editState.value.trim();
+        editPost.value = editPost.value.trim();
+        editDistrict.value = editDistrict.value.trim();
+        editContact.value = editContact.value.trim();
+
+        if (editAddressForm.checkValidity()) {
+            // If the form is valid, save the address
+            saveEditAddress();
+        } else {
+            // If the form is not valid, show validation feedback
+            editAddressForm.classList.add('was-validated');
+
+            // Show specific error messages
+            if (!editFirstname.checkValidity()) {
+                document.getElementById('editFirstnameError').textContent = 'Please enter a valid first name.';
+            }
+            if (!editLastname.checkValidity()) {
+                document.getElementById('editLastnameError').textContent = 'Please enter a valid last name.';
+            }
+            if (!editHouse.checkValidity()) {
+                document.getElementById('editHouseError').textContent = 'Please enter a valid street address.';
+            }
+            if (!editCity.checkValidity()) {
+                document.getElementById('editCityError').textContent = 'Please enter a valid town or city.';
+            }
+            if (!editState.checkValidity()) {
+                document.getElementById('editStateError').textContent = 'Please enter a valid state.';
+            }
+            if (!editPost.checkValidity()) {
+                document.getElementById('editPostError').textContent = 'Please enter a valid postcode or ZIP.';
+            }
+            if (!editDistrict.checkValidity()) {
+                document.getElementById('editDistrictError').textContent = 'Please enter a valid district.';
+            }
+            if (!editContact.checkValidity()) {
+                document.getElementById('editContactError').textContent = 'Please enter a valid phone number.';
+            }
+
+            // Prevent form submission
+            return false;
+        }
+    }
+
+    function saveEditAddress() {
+        // Implement the logic to save the edited address
+        // This function will be called when the form is valid
+        console.log('Saving edited address...');
+        // You can use fetch or any other method to send the data to the server
+    }
+</script>
 
 
 

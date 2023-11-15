@@ -37,7 +37,7 @@
                 <td>₹<%= wishlist[i].price %></td>
                 <td id="remove-wishlist-<%= wishlist[i]._id %>">
                   <% if(wishlist[i].stock > 0) { %>
-                    <button class="btn btn-primary" onclick="addToCartOrShowMessage('<%= wishlist[i]._id %>')">Add to Cart</button>
+                    <button class="btn btn-primary" onclick="addtoCart('<%= wishlist[i]._id %>')">Add to Cart</button>
                 <% } else { %>
                     <button class="btn btn-primary" style="pointer-events: none; opacity: 0.5;">Out of Stock</button>
                 <% } %>
@@ -49,7 +49,12 @@
     </table>
   </div>
     <% } else { %>
-      <p>Your wishlist is empty.</p>
+      <div class="empty" style="height: 300px;">
+
+        <h3>Your wishlist is empty....</h3>
+
+      </div>
+     
       <% } %>
 </section>
 

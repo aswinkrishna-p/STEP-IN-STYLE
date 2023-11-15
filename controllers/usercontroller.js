@@ -705,12 +705,8 @@ const removefromwishlist = async (req, res) => {
   }
 };
 
-// test router
-const getTest = async (req, res) => {
-  const email = req.session.user;
-  const user = await usermodel.findOne({ email: email });
-  res.render("users/test", { user });
-};
+
+
 
 // products
 
@@ -718,19 +714,15 @@ const getProducts = async (req, res) => {
   const email = req.session.user;
   try {
     // Get form input values
-
-    const malecategory = await Category.find({ gender: "male" }).populate(
-      "subcategories"
-    );
-    const femalecategory = await Category.find({ gender: "female" }).populate(
-      "subcategories"
-    );
+    const malecategory = await Category.find({ gender: "male" }).populate("subcategories");
+    const femalecategory = await Category.find({ gender: "female" }).populate("subcategories");
     const minPrice = parseInt(req.query.minPrice) || 0;
     const maxPrice = parseFloat(req.query.maxPrice) || Infinity;
     const page = parseInt(req.query.page) || 1; // Get page number from query parameters
     const perPage = 6; // Number of products per page
     const searchQuery = req.query.query || "";
-
+    const sortOrder = req.query.priceSort || "asc"; // Default to ascending order
+    console.log('req query',req.query.priceSort);
     // Calculate the skip value based on the page number
     const skip = (page - 1) * perPage;
 
@@ -755,10 +747,15 @@ const getProducts = async (req, res) => {
       ];
     }
 
-    // console.log("Query:", query);
-
-    // Retrieve products with pagination
-    const products = await Product.find(query).skip(skip).limit(perPage);
+    // Add sorting based on the selected sort order
+    const sortOptions = {};
+    if (req.query.priceSort) {
+      sortOptions["price"] = sortOrder === "desc" ? -1 : 1;
+    }
+    console.log('sort option',sortOptions);
+    
+    // Retrieve products with pagination and sorting
+    const products = await Product.find(query).sort(sortOptions).skip(skip).limit(perPage);
 
     const user = await usermodel.findOne({ email: email });
 
@@ -767,6 +764,7 @@ const getProducts = async (req, res) => {
     const totalPages = Math.ceil(totalProducts / perPage);
 
     const currentDate = new Date();
+    
     // Render the products with filtering, pagination, and sorting options
     res.render("users/productlist", {
       products,
@@ -782,6 +780,7 @@ const getProducts = async (req, res) => {
     console.log(error);
   }
 };
+        
 
 // single product view
 const getsingleproduct = async (req, res) => {
@@ -1413,8 +1412,7 @@ const editAddress = async (req, res) => {
   try {
     const addressId = req.body.addressId;
 
-    console.log(addressId,'00000000000000000000000000000000000000000000id');
-
+   
     // console.log(req.body,'adresssssssssssssss');
 
     // Extract the fields using the index
@@ -1435,7 +1433,7 @@ const editAddress = async (req, res) => {
       // Find the specific address to update
       const addressToEdit = user.address.id(addressId);
 
-      console.log(addressToEdit,'adress to edittttttttttttttttttttttt');
+     
 
       if (addressToEdit) {
         // Update the fields for the specific address
@@ -1454,7 +1452,7 @@ const editAddress = async (req, res) => {
 
     res.redirect("/address-book");
   } catch (error) {
-    console.log(error);
+    console.log(error); 
   }
 };
 
@@ -1746,7 +1744,6 @@ module.exports = {
   postresetpassword,
 
   getHome,
-  getTest,
   getverification,
   verifyEmail,
   resendotp,

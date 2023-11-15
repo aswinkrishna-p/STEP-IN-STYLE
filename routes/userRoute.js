@@ -27,7 +27,6 @@ router.get("/login",loggedout,usercontroller.getlogin)
 
 router.post("/login",usercontroller.postlogin)
 
-router.get("/test",usercontroller.getTest)
 
 // forgot pasword
 

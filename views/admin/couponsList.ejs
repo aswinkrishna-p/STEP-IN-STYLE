@@ -82,6 +82,7 @@
                     <div class="form-group">
                         <label for="couponType">Coupon Type</label>
                         <select class="form-control" id="couponType" name="type" required>
+                          
                             <option value="Percentage">Percentage</option>
                             <option value="Fixed Amount">Fixed Amount</option>
                         </select>
@@ -138,8 +139,8 @@
                             <div class="form-group">
                                 <label for="editCouponType" class="form-label">Coupon Type</label>
                                 <select class="form-select" id="editCouponType" name="type">
-                                    <option value="Percentage" <%= coupon.type === 'Percentage' ? 'selected' : '' %>>Percentage</option>
-                                    <option value="Fixed Amount" <%= coupon.type === 'Fixed Amount' ? 'selected' : '' %>>Fixed Amount</option>
+                                    <option value="PERCENTAGE" <%= coupon.type === 'PERCENTAGE' ? 'selected' : '' %>>Percentage</option>
+                                    <option value="FIXED AMOUNT" <%= coupon.type === 'FIXED AMOUNT' ? 'selected' : '' %>>Fixed Amount</option>
                                 </select>
                             </div>
                             <!-- Coupon Discount -->

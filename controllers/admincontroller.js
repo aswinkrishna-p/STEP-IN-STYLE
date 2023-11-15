@@ -909,6 +909,8 @@ const createCoupon = async (req, res) => {
         const min = req.body.min;
         const expiry = req.body.expiry.trim();
 
+        
+
 
         const existingCoupon = await Coupon.findOne({ code });
 

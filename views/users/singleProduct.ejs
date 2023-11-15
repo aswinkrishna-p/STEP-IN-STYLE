@@ -35,7 +35,7 @@
 
               <div class="col-lg-6 product-details pl-md-5 ftco-animate">
                   <h3><%= product.productName %></h3>
-                  <div class="rating d-flex">
+                  <!-- <div class="rating d-flex">
                           <p class="text-left mr-4">
                               <a href="#" class="mr-2">5.0</a>
                               <a href="#"><span class="ion-ios-star-outline"></span></a>
@@ -50,7 +50,7 @@
                           <p class="text-left">
                               <a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
                           </p>
-                      </div>
+                      </div> -->
                       
                       <input type="hidden" name="price" id="price<%= product._id %>" value="<%= product.price %>">
                       <% if (product.offer && product.expiryDate) { %>
@@ -145,12 +145,12 @@
 
           <div class="row mt-5">
         <div class="col-md-12 nav-link-wrap">
-          <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="display: flex; justify-content: center;">
             <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
 
             <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
 
-            <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
+            <!-- <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a> -->
 
           </div>
         </div>
@@ -160,18 +160,18 @@
 
             <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
                 <div class="p-4">
-                    <h3 class="mb-4">Nike Free RN 2019 iD</h3>
-                    <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
+                    <h3 class="mb-4"><%= product.productName %></h3>
+                    <p><%= product.description %></p>
                 </div>
             </div>
 
             <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
                 <div class="p-4">
-                    <h3 class="mb-4">Manufactured By Nike</h3>
+                    <h3 class="mb-4">Manufactured By Step in style</h3>
                     <p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
                 </div>
             </div>
-            <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+            <!-- <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
                 <div class="row p-4">
                                  <div class="col-md-7">
                                      <h3 class="mb-4">23 Reviews</h3>
@@ -297,7 +297,7 @@
                                      </div>
                                  </div>
                              </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
