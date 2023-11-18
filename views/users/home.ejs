@@ -131,7 +131,8 @@
                                     <a href="/singleproduct?productid=<%= products[i]._id %>" class="buy-now text-center py-2">View details </details><span><i></i></span></a>
                                     
                                   <% }else{%>  
-                                    <a href="/login" class="buy-now text-center py-2">add to wishlist<span><i class="ion-ios-add ml-1"></i></span></a> <a href="/login" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
+                                    <a href="/login" class="buy-now text-center py-2">add to wishlist<span><i class="ion-ios-add ml-1"></i></span></a> 
+                                    <a href="/singleproduct?productid=<%= products[i]._id %>" class="buy-now text-center py-2">view details<span><i class="ion-ios-cart ml-1"></i></span></a>
                                 </p>
                                 <% } %>
                         </div>

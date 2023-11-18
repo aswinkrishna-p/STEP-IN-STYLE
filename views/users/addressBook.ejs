@@ -43,7 +43,7 @@
 
 <% if (user && user.address && user.address.length > 0) { %>
 
-    <div class="row" style="width: 100%; " >
+    <div class="row" style="width: 100%; margin-bottom: 30px; " >
       <% user.address.forEach((address, index) => { %>
         <div class="col-md-4 col-mb-3">
           <div class="card">
@@ -149,7 +149,7 @@
                                   <!-- Postcode/ZIP -->
                                   <div class="form-group">
                                       <label for = "newPostcodeZip">Postcode / ZIP *</label>
-                                      <input type="text" class="form-control" id="newPostcodeZip" name="newPostcodeZip" placeholder="Postcode / ZIP" required>
+                                      <input type="number" class="form-control" id="newPostcodeZip" name="newPostcodeZip" placeholder="Postcode / ZIP" required>
                                       <!-- Add a span element for error message -->
                                       <span class="text-danger" id="postcodeZipError"></span>
                                   </div>
@@ -168,7 +168,7 @@
                           <!-- Phone -->
                           <div class="form-group">
                               <label for="newPhone">Phone</label>
-                              <input type="text" class="form-control" id="newPhone" name="newPhone" placeholder="Phone" required>
+                              <input type="number" class="form-control" id="newPhone" name="newPhone" placeholder="Phone" required>
                               <!-- Add a span element for error message -->
                               <span class="text-danger" id="phoneError"></span>
                           </div>
@@ -194,9 +194,9 @@
                   <span aria-hidden="true">&times;</span>
               </button>
           </div>
+          <form action="/editaddress" method="POST" id="editAddressForm" onsubmit="return validateAndSaveEditAddress()">
           <div class="modal-body">
               <!-- Add a form here for editing address fields -->
-              <form action="/editaddress" method="POST" id="editAddressForm" onsubmit="return validateAndSaveEditAddress()">
               
                   <!-- Include input fields for editing address details -->
                   <input type="hidden" name="addressId" value="<%= address._id %>">
@@ -258,12 +258,13 @@
                           </div>
                       </div>
                   </div>
-              </form>
+              
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" form="editAddressForm" class="btn btn-primary">Save Changes</button>
           </div>
+        </form>
       </div>
   </div>
 </div>
@@ -289,9 +290,7 @@
       </div>
     </div>
   </div>
-    </div>
-    </div>
-    </div>
+   
 
 
       <% }); %>
@@ -301,7 +300,9 @@
       You don't have any addresses in your address book.
     </div>
   <% } %>
-  
+</div>
+</div>
+</div>
   
 
  

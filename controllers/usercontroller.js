@@ -639,6 +639,8 @@ const getwishlist = async (req, res) => {
     // Extract the wishlist from the user object
     const wishlist = user.wishlist.map((item) => item.product);
 
+   
+
     // Render the wishlist page with the user and wishlist data
     res.render("users/wishlist", { user: user || false, wishlist });
   } catch (error) {
@@ -1278,7 +1280,7 @@ const getprofile = async (req, res) => {
 
     if (user.referral) {
       const referralCode = user.referral;
-      const signUpURL = "http://localhost:3000/signup";
+      const signUpURL = "https://stepinstyle.site/signup";
       referralLink = `${signUpURL}?referral=${referralCode}`;
     }
 
@@ -1410,10 +1412,9 @@ const setDefaultAddress = async (req, res) => {
 
 const editAddress = async (req, res) => {
   try {
+   
     const addressId = req.body.addressId;
 
-   
-    // console.log(req.body,'adresssssssssssssss');
 
     // Extract the fields using the index
     const editFirstname = req.body.editFirstname;
@@ -1427,12 +1428,12 @@ const editAddress = async (req, res) => {
 
     const user = await usermodel.findOne({ 'address._id' : addressId });
 
-    // console.log(user,'userrrrrrrrrrrrrrrrrr');
+   
 
     if (user) {
       // Find the specific address to update
       const addressToEdit = user.address.id(addressId);
-
+      
      
 
       if (addressToEdit) {
